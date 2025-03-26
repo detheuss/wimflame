@@ -28,7 +28,7 @@ export default defineConfig({
         theme_color: "#0f172a",
         icons: [
           {
-            src: "icons/tabler--hexagon-filled.png",
+            src: "logo/logo.png",
             sizes: "256x256",
             type: "image/png",
           },
