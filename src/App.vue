@@ -4,13 +4,13 @@
   >
     <nav class="mb-4 flex items-center gap-1">
       <img src="/logo/logo.svg" alt="Wimflame Logo" width="48" height="48" />
-      <h1 class="font-black"></h1>
-
+      <h1 class="font">Wimflame</h1>
       <ThemeSwitcher class="ms-auto" />
     </nav>
+
     <Breather :breath-time="'3.5'" />
 
-    <div class="mt-auto flex flex-col gap-2">
+    <div class="my-auto flex flex-col gap-2">
       <WFDrawer
         title="Breathing Settings"
         description="Adjust breaths, speed, breaks and more."
@@ -29,6 +29,17 @@
       </WFDrawer>
       <!-- <Button size="lg" class="font-bold"> Buy me a Coffee </Button> -->
       <Installer />
+    </div>
+    <div class="mt-auto text-center">
+      <a
+        class="text-sm text-primary"
+        href="https://github.com/detheuss/wimflame"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        @detheuss</a
+      >
+      <h3 class="text-secondary-foreground">All the Love—All The Power.</h3>
     </div>
   </div>
 </template>

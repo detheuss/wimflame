@@ -36,16 +36,6 @@
         Source Code on GitHub
       </Button>
     </a>
-    <a
-      class="mt-2 block"
-      href="https://radovankrizalkovic.vercel.app/"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <Button size="lg" variant="secondary" class="w-full">
-        View My Developer Portfolio
-      </Button>
-    </a>
   </section>
 </template>
 
