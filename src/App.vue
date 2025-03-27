@@ -1,16 +1,16 @@
 <template>
   <div
-    class="mx-auto flex max-h-screen min-h-[100dvh] w-full max-w-lg flex-col p-5"
+    class="mx-auto flex max-h-screen min-h-[100dvh] w-full max-w-md flex-col p-5 lg:border"
   >
     <nav class="mb-4 flex items-center gap-1">
       <img src="/logo/logo.svg" alt="Wimflame Logo" width="48" height="48" />
       <h1 class="font">Wimflame</h1>
       <ThemeSwitcher class="ms-auto" />
     </nav>
-
-    <Breather :breath-time="'3.5'" />
-
-    <div class="my-auto flex flex-col gap-2">
+    <div class="flex flex-1 items-center justify-center">
+      <Breather :breath-time="'3.5'" />
+    </div>
+    <div class="mt-auto flex flex-col gap-2">
       <WFDrawer
         title="Breathing Settings"
         description="Adjust breaths, speed, breaks and more."
@@ -30,7 +30,7 @@
       <!-- <Button size="lg" class="font-bold"> Buy me a Coffee </Button> -->
       <Installer />
     </div>
-    <div class="mt-auto text-center">
+    <div class="mt-8 text-center">
       <a
         class="text-sm text-primary"
         href="https://github.com/detheuss/wimflame"

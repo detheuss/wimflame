@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative flex aspect-square h-full w-full items-center justify-center"
+    class="relative flex aspect-square h-full w-full max-w-[300px] items-center justify-center"
   >
     <img
       src="/icons/breather-hex.svg"

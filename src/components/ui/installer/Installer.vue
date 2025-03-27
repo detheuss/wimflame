@@ -35,6 +35,7 @@ onMounted(() => {
 const isIOS = ref();
 
 function installPWA() {
+  console.log("clicked");
   const promptEvent = deferredPrompt.value as any;
   if (!promptEvent) return;
 

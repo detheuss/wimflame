@@ -1,16 +1,24 @@
 <template>
   <section id="android-instructions">
-    <Heading2>Great News! 🎉 </Heading2>
+    <div class="rounded-lg border p-6">
+      <Heading2>Great News! 🎉 </Heading2>
+      <Paragraph>
+        Wimflame can be installed on your device!
+        <span class="font-bold text-primary">
+          Just tap the install button below
+        </span>
+        to get started.
+      </Paragraph>
+      <Button size="lg" class="mt-4 w-full" @click="emit('onInstall')">
+        Install Now
+      </Button>
+    </div>
+
+    <Heading2>Troubleshooting: Installation Did Not Start</Heading2>
     <Paragraph>
-      Wimflame can be installed on your device!
-      <span class="font-bold text-primary">
-        Just tap the install button below
-      </span>
-      to get started.
+      If you're not using Google Chrome, please open this site in Chrome and try
+      again. If you are using Chrome, simply refresh the page and try once more.
     </Paragraph>
-    <Button size="lg" class="mt-4 w-full" @click="handleInstall">
-      Install Now
-    </Button>
 
     <Heading2>Why Isn't Wimflame on the Google Play Store?</Heading2>
     <Paragraph>
@@ -34,7 +42,7 @@
       target="_blank"
       rel="noopener noreferrer"
     >
-      <Button size="lg" variant="outline" class="w-full" @click="handleInstall">
+      <Button size="lg" variant="outline" class="w-full">
         Source Code on GitHub
       </Button>
     </a>
@@ -47,9 +55,6 @@ import Heading2 from "@/components/ui/typography/Heading2.vue";
 import Paragraph from "@/components/ui/typography/Paragraph.vue";
 
 const emit = defineEmits(["onInstall"]);
-const handleInstall = () => {
-  emit("onInstall");
-};
 </script>
 
 <style scoped></style>
