@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-[50%] mx-auto">
+  <div class="mx-auto max-w-[50%]">
     <Breather :breath-time="breathTime" is-preview />
   </div>
   <!-- prettier-ignore -->
@@ -111,6 +111,7 @@ const syncBreather = () => {
 };
 
 const resetToDefaults = () => {
+  settingsModel.breathingSpeed = settingBs.defaultValue;
   for (const setting of settingsDefaults) {
     settingsModel[setting.id] = [...setting.defaultValue];
   }
