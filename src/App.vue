@@ -34,8 +34,6 @@
 </template>
 
 <script setup lang="ts">
-import Button from "@/components/ui/button/Button.vue";
-
 import { computed, onMounted, reactive, ref } from "vue";
 
 import WFDrawer from "@/components/ui/setting/WFDrawer.vue";
