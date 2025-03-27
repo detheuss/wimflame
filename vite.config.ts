@@ -29,7 +29,7 @@ export default defineConfig({
         icons: [
           {
             src: "logo/logo.png",
-            sizes: "256x256",
+            sizes: "300x300",
             type: "image/png",
           },
         ],
