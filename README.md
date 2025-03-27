@@ -1,3 +1,3 @@
-# Vite + Vue + PWA
+# Wimflame
 
-Scaffolding this template should help you create installable Vite + Vue PWA in no time.
+All the Love—All The Power.
