@@ -1,61 +1,61 @@
 <template>
-  <div class="w-full max-w-lg h-[100dvh] mx-auto px-10 py-9 flex flex-col">
-    <nav class="flex gap-1 items-center mb-4">
+  <div class="mx-auto flex min-h-screen w-full max-w-lg flex-col border p-5">
+    <nav class="mb-4 flex items-center gap-1">
       <img src="/logo/logo.svg" alt="Wimhales Logo" width="48" height="48" />
       <h1 class="font-black">WIMFLAME</h1>
     </nav>
 
-    <main class="w-full h-full flex flex-col">
+    <main class="h-full w-full flex-col">
       <Display
         >All the <span class="text-cyan-400">Love</span>—<br />
         all the <span class="text-cyan-400">Power</span>.
       </Display>
-      <h2>Free. Forever.</h2>
-
-      <Drawer :handleOnly="isSliding">
-        <div class="mt-auto w-full flex gap-2">
-          <DrawerTrigger class="flex-1"> Settings </DrawerTrigger>
-          <Button class="flex-1"> Breathe </Button>
-        </div>
-        <DrawerContent class="w-full max-w-lg border mx-auto flex flex-col">
-          <DrawerHeader>
-            <DrawerTitle>Session Settings</DrawerTitle>
-            <DrawerDescription
-              >Adjust breathing speed, music, and more.</DrawerDescription
-            >
-          </DrawerHeader>
-          <div
-            class="border max-h-[60vh] overflow-y-auto"
-            @scroll.prevent="handleSlidingChange(true)"
-            @scrollend.prevent="handleSlidingChange(false)"
-          >
-            <Setting
-              v-for="(setting, key) in settingsValues"
-              :key="key"
-              :id="key"
-              :label="setting.label"
-              :min="setting.min"
-              :max="setting.max"
-              v-model:modelValue="settingsModel[key as keyof SettingsModel]"
-              @slidingChange="handleSlidingChange"
-            />
-          </div>
-
-          <DrawerFooter class="flex flex-row w-full">
-            <DrawerClose class="w-full">
-              <Button variant="outline" class="w-full"> Cancel </Button>
-            </DrawerClose>
-            <Button
-              variant="default"
-              class="w-full"
-              @click="handleSaveSettings"
-            >
-              Save
-            </Button>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
     </main>
+
+    <Drawer :handleOnly="isSliding">
+      <div class="mt-auto flex w-full gap-2">
+        <DrawerTrigger class="flex-1"> Settings </DrawerTrigger>
+        <Button size="lg" class="flex-1"> Breathe </Button>
+      </div>
+      <DrawerContent class="mx-auto flex w-full max-w-lg flex-col border">
+        <DrawerHeader>
+          <DrawerTitle class="text-lg">Session Settings</DrawerTitle>
+          <DrawerDescription
+            >Adjust breathing speed, music, and more.</DrawerDescription
+          >
+        </DrawerHeader>
+        <div
+          class="max-h-[60vh] overflow-y-auto border"
+          @scroll.prevent="handleSlidingChange(true)"
+          @scrollend.prevent="handleSlidingChange(false)"
+        >
+          <Setting
+            v-for="(setting, key) in settingsValues"
+            :key="key"
+            :id="key"
+            :label="setting.label"
+            :min="setting.min"
+            :max="setting.max"
+            v-model:modelValue="settingsModel[key as keyof SettingsModel]"
+            @slidingChange="handleSlidingChange"
+          />
+        </div>
+
+        <DrawerFooter class="flex w-full flex-row">
+          <DrawerClose class="w-full">
+            <Button size="lg" variant="outline" class="w-full"> Cancel </Button>
+          </DrawerClose>
+          <Button
+            size="lg"
+            variant="default"
+            class="w-full"
+            @click="handleSaveSettings"
+          >
+            Save
+          </Button>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   </div>
 </template>
 
