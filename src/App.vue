@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto flex min-h-screen w-full max-w-lg flex-col border p-5">
+  <div class="mx-auto flex min-h-[100dvh] max-h-screen w-full max-w-lg flex-col border p-5">
     <nav class="mb-4 flex items-center gap-1">
       <img src="/logo/logo.svg" alt="Wimhales Logo" width="48" height="48" />
       <h1 class="font-black">WIMFLAME</h1>
