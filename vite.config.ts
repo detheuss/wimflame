@@ -18,14 +18,14 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
-        name: "Wimhales",
-        short_name: "Wimhales",
+        name: "Wimflame: All the Love, All the Power.",
+        short_name: "Wimflame",
         description:
           "Track your Wim Hof breathing sessions – all the love, all the power.",
         start_url: "/",
         display: "standalone",
-        background_color: "#ffffff",
-        theme_color: "#0f172a",
+        background_color: "#09090b",
+        theme_color: "#09090b",
         icons: [
           {
             src: "logo/logo.png",
