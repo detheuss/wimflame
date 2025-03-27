@@ -8,7 +8,9 @@
       </span>
       to get started.
     </Paragraph>
-    <Button size="lg" class="mt-4 w-full"> Install Now</Button>
+    <Button size="lg" class="mt-4 w-full" @click="handleInstall">
+      Install Now
+    </Button>
 
     <Heading2>Why Isn't Wimflame on the Google Play Store?</Heading2>
     <Paragraph>
