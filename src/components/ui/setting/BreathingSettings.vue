@@ -1,5 +1,7 @@
 <template>
-  <Breather :breath-time="breathTime" is-preview />
+  <div class="max-w-[50%] mx-auto">
+    <Breather :breath-time="breathTime" is-preview />
+  </div>
   <!-- prettier-ignore -->
   <Setting
     :key="settingBs.id"

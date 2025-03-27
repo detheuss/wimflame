@@ -4,28 +4,31 @@
   >
     <nav class="mb-4 flex items-center gap-1">
       <img src="/logo/logo.svg" alt="Wimflame Logo" width="48" height="48" />
-      <h1 class="font-black">WIMFLAME</h1>
+      <h1 class="font-black"></h1>
 
       <ThemeSwitcher class="ms-auto" />
     </nav>
     <Breather :breath-time="'3.5'" />
 
     <div class="mt-auto flex flex-col gap-2">
-      <SettingsDrawer
+      <WFDrawer
         title="Breathing Settings"
         description="Adjust breaths, speed, breaks and more."
         trigger-label="Breathing Settings"
+        confirm-cta="Save"
       >
         <BreathingSettings @sliding-change="handleSlidingChange" />
-      </SettingsDrawer>
+      </WFDrawer>
 
-      <SettingsDrawer
+      <WFDrawer
         title="Music & Sound Settings"
         description="Adjust music and sounds."
         trigger-label="Music & Sound Settings"
+        confirm-cta="Save"
       >
-      </SettingsDrawer>
-      <Button size="lg" class="font-bold"> Buy me a Coffee </Button>
+      </WFDrawer>
+      <!-- <Button size="lg" class="font-bold"> Buy me a Coffee </Button> -->
+      <Installer />
     </div>
   </div>
 </template>
@@ -35,10 +38,11 @@ import Button from "@/components/ui/button/Button.vue";
 
 import { computed, onMounted, reactive, ref } from "vue";
 
-import SettingsDrawer from "@/components/ui/setting/SettingsDrawer.vue";
+import WFDrawer from "@/components/ui/setting/WFDrawer.vue";
 import BreathingSettings from "@/components/ui/setting/BreathingSettings.vue";
 import ThemeSwitcher from "@/components/ui/setting/ThemeSwitcher.vue";
 import Breather from "@/components/ui/breather/Breather.vue";
+import Installer from "@/components/ui/installer/Installer.vue";
 
 const isSliding = ref(false);
 const settingBs = {
@@ -101,6 +105,9 @@ const syncBreather = () => {
 
 onMounted(() => {
   syncBreather();
+  window.addEventListener("beforeinstallprompt", () => {
+    console.log("🔥 beforeinstallprompt fired!");
+  });
 });
 
 interface SettingsModel {

@@ -2,7 +2,7 @@
   <Drawer :handleOnly="true">
     <div class="flex w-full gap-2">
       <DrawerTrigger class="flex-1">
-        <Button class="w-full" size="lg" variant="outline">
+        <Button class="w-full" size="lg" :variant="triggerVariant ?? 'outline'">
           {{ triggerLabel }}
         </Button>
       </DrawerTrigger>
@@ -22,16 +22,19 @@
       <DrawerFooter class="flex w-full flex-col">
         <div class="flex items-center justify-center gap-2">
           <DrawerClose class="flex-1">
-            <Button size="lg" variant="outline" class="w-full"> Cancel </Button>
+            <Button size="lg" variant="outline" class="w-full">
+              {{ cancelCta ?? "Cancel" }}
+            </Button>
           </DrawerClose>
         </div>
         <Button
+          v-if="!isConfirmBtnHidden"
           size="lg"
           variant="default"
           class="w-full"
-          @click="handleSaveSettings"
+          @click="handleConfirmAction"
         >
-          Save
+          {{ confirmCta ?? "OK" }}
         </Button>
       </DrawerFooter>
     </DrawerContent>
@@ -39,7 +42,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from "vue";
 import Button from "@/components/ui/button/Button.vue";
 import Drawer from "@/components/ui/drawer/Drawer.vue";
 import DrawerContent from "@/components/ui/drawer/DrawerContent.vue";
@@ -49,19 +51,30 @@ import DrawerDescription from "@/components/ui/drawer/DrawerDescription.vue";
 import DrawerFooter from "@/components/ui/drawer/DrawerFooter.vue";
 import { DrawerClose, DrawerTrigger } from "vaul-vue";
 
-defineProps({
-  triggerLabel: { type: String, default: "" },
-  title: { type: String, default: "" },
-  description: {
-    type: String,
-    default: "",
-  },
-});
+export type ButtonVariantT =
+  | "outline"
+  | "default"
+  | "destructive"
+  | "secondary"
+  | "ghost"
+  | "link"
+  | null
+  | undefined;
 
-const emit = defineEmits(["onSaveSettings"]);
+defineProps<{
+  triggerVariant?: ButtonVariantT;
+  triggerLabel?: string;
+  title?: string;
+  description?: string;
+  confirmCta?: string;
+  cancelCta?: string;
+  isConfirmBtnHidden?: boolean;
+}>();
 
-const handleSaveSettings = () => {
-  emit("onSaveSettings");
+const emit = defineEmits(["onConfirmAction"]);
+
+const handleConfirmAction = () => {
+  emit("onConfirmAction");
 };
 </script>
 

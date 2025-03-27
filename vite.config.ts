@@ -17,6 +17,9 @@ export default defineConfig({
     vue(),
     VitePWA({
       registerType: "autoUpdate",
+      devOptions: {
+        enabled: true,
+      },
       manifest: {
         name: "Wimflame: All the Love, All the Power.",
         short_name: "Wimflame",
