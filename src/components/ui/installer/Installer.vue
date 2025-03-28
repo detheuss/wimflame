@@ -7,7 +7,7 @@
     isConfirmBtnHidden
     confirm-cta="Install Now"
   >
-    <AppleFlamingView v-if="isIOS" />
+    <AppleFlamingView v-if="isIOS" @on-install="installPWA" />
     <AndroidWindowsView v-else @on-install="installPWA" />
   </WFDrawer>
 </template>

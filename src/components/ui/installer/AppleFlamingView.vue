@@ -1,5 +1,18 @@
 <template>
   <section id="ios-instructions">
+    <div class="rounded-lg border p-6">
+      <Heading2>Great News! 🎉 </Heading2>
+      <Paragraph>
+        Wimflame can be installed on your device!
+        <span class="font-bold text-primary">
+          Just tap the install button below
+        </span>
+        to get started.
+      </Paragraph>
+      <Button size="lg" class="mt-4 w-full" @click="emit('onInstall')">
+        Install Now
+      </Button>
+    </div>
     <Heading2>🍎 iOS Installation</Heading2>
     <Paragraph>
       Unlike all other major platforms (including Android and Windows), Apple’s
@@ -77,6 +90,9 @@
 import Heading2 from "@/components/ui/typography/Heading2.vue";
 import Paragraph from "@/components/ui/typography/Paragraph.vue";
 import UList from "@/components/ui/typography/UList.vue";
+import Button from "@/components/ui/button/Button.vue";
+
+const emit = defineEmits(["onInstall"]);
 </script>
 
 <style scoped></style>
