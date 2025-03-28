@@ -1,0 +1,37 @@
+@keyframes breather {
+  0%,
+  100% {
+    transform: scale(0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 1;
+  }
+}
+@keyframes breather-aura {
+  0%,
+  30% {
+    transform: scale(1); /* Normal size */
+    // opacity: 1;
+  }
+  50% {
+    transform: scale(1.1); /* Slightly larger */
+    // opacity: 0;
+  }
+  80% {
+    transform: scale(1); /* Normal size */
+    // opacity: 1;
+  }
+}
+
+.breather {
+  animation-name: breather;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+.breather-aura {
+  animation-name: breather-aura;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}

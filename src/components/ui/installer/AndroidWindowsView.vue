@@ -20,11 +20,11 @@
       again. If you are using Chrome, simply refresh the page and try once more.
     </Paragraph>
 
-    <Heading2>Why Isn't Wimflame on the Google Play Store?</Heading2>
+    <Heading2>Is Wimflame on Google Play?</Heading2>
     <Paragraph>
-      Wimflame is a free, open-source project that meets the
+      Wimflame is a modern, open-source project that meets the
       <span class="font-bold">Progressive Web App (PWA) requirements</span>,
-      which allows it to be installed directly. I could publish it to Google
+      which allows it to be installed directly from the browser. I could publish it to Google
       Play, but as a solo developer with limited time, I’ve prioritized building
       the app itself.
     </Paragraph>

@@ -16,3 +16,11 @@ export const checkIsIOSPojebanySkurvenyRakByPozulTotuFirmu = (): boolean => {
     (platform === "MacIntel" && maxTouch > 1)
   );
 };
+
+export const scrollToElementById = (id: string) => {
+  const el = document.getElementById(id);
+  console.log(el);
+  if (!el) return;
+
+  el.scrollIntoView({ behavior: "smooth" });
+};

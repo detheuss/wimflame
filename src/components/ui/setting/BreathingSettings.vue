@@ -82,6 +82,13 @@ const settingsDefaults: SettingDefinition[] = [
     defaultValue: [0],
   },
   {
+    id: "pauseBeforeFirstRound",
+    label: "Pause before First Round",
+    min: 0,
+    max: 20,
+    defaultValue: [0],
+  },
+  {
     id: "holdAfterInhale",
     label: "Hold after Inhale",
     min: 5,
@@ -97,7 +104,8 @@ const settingsModel = reactive<Record<SettingId, number[]>>({
   breaths: [...settingsDefaults[0].defaultValue],
   rounds: [...settingsDefaults[1].defaultValue],
   pauseBetweenRounds: [...settingsDefaults[2].defaultValue],
-  holdAfterInhale: [...settingsDefaults[3].defaultValue],
+  pauseBeforeFirstRound: [...settingsDefaults[3].defaultValue],
+  holdAfterInhale: [...settingsDefaults[4].defaultValue],
 });
 
 const breathingSpeedDisplayValue = computed(() => {
