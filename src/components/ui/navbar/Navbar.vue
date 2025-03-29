@@ -1,5 +1,5 @@
 <template>
-  <nav class="mb-4 flex items-center gap-1">
+  <nav class="flex items-center gap-1">
     <img src="/logo/logo.svg" alt="Wimflame Logo" width="48" height="48" />
     <h1 class="font">Wimflame</h1>
     <ThemeSwitcher class="ms-auto" />

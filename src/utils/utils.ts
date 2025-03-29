@@ -24,3 +24,11 @@ export const scrollToElementById = (id: string) => {
 
   el.scrollIntoView({ behavior: "smooth" });
 };
+
+export const secondsToMinutes = (seconds: number | null): string | null => {
+  if (seconds == null) return seconds;
+
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+};

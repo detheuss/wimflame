@@ -8,6 +8,7 @@
       </DrawerTrigger>
     </div>
     <DrawerContent class="mx-auto flex w-full max-w-lg flex-col border">
+      <!-- <QuasiHandle @touchChange="handleWorkaround" /> -->
       <DrawerHeader>
         <DrawerTitle class="text-lg">{{ title }}</DrawerTitle>
         <DrawerDescription>
@@ -23,7 +24,7 @@
         <div class="flex items-center justify-center gap-2">
           <DrawerClose class="flex-1">
             <Button size="lg" variant="outline" class="w-full">
-              {{ cancelCta ?? "Cancel" }}
+              {{ cancelCta ?? "Close" }}
             </Button>
           </DrawerClose>
         </div>
@@ -50,6 +51,8 @@ import DrawerTitle from "@/components/ui/drawer/DrawerTitle.vue";
 import DrawerDescription from "@/components/ui/drawer/DrawerDescription.vue";
 import DrawerFooter from "@/components/ui/drawer/DrawerFooter.vue";
 import { DrawerClose, DrawerTrigger } from "vaul-vue";
+// import QuasiHandle from "@/components/ui/quasihandle/QuasiHandle.vue";
+// import { ref } from "vue";
 
 export type ButtonVariantT =
   | "outline"
@@ -76,6 +79,13 @@ const emit = defineEmits(["onConfirmAction"]);
 const handleConfirmAction = () => {
   emit("onConfirmAction");
 };
+
+// const handleWorkaround = (val: boolean) => {
+//   isWorkaround.value = val;
+//   console.log("touchChange", isWorkaround.value);
+// };
+
+// const isWorkaround = ref(true);
 </script>
 
 <style scoped></style>

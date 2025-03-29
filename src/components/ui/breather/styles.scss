@@ -24,7 +24,25 @@
     // opacity: 1;
   }
 }
+@keyframes breather-timer {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
 
+.breather-timer {
+  animation: breather-timer 10s ease-in-out infinite;
+  transform-origin: center;
+}
 .breather {
   animation-name: breather;
   animation-timing-function: ease-in-out;

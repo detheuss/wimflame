@@ -1,26 +1,46 @@
 <template>
+  <Toaster />
+
   <div
-    class="mx-auto flex max-h-screen min-h-[100dvh] w-full max-w-md flex-col p-5 lg:border"
+    class="relative mx-auto flex max-h-screen min-h-[100dvh] w-full max-w-md flex-col overflow-hidden p-5 lg:border"
   >
     <!-- HEADER -->
-    <Navbar />
+    <Transition name="fade" mode="out-in">
+      <Navbar v-if="currentPhase === 'before'" />
+      <NavbarPlaceholder v-else />
+    </Transition>
 
     <!-- APP -->
-    <main class="flex flex-1 items-center justify-center">
-      <Transition name="fade-zoom">
-        <StartButton v-if="currentPhase === 'before'" />
-      </Transition>
-    </main>
 
-    <!-- QUICK ACTIONS -->
-    <div class="flex flex-col">
-      <Transition name="fade" mode="out-in">
-        <QuickActions v-if="currentPhase === 'before'" class="mt-auto" />
-      </Transition>
+    <Transition
+      name="fade-zoom"
+      mode="out-in"
+      @after-leave="isAnimationDone = true"
+    >
+      <div
+        v-if="currentPhase === 'before'"
+        class="my-auto flex h-full flex-1 flex-col items-center justify-center"
+      >
+        <StartButton />
+      </div>
+    </Transition>
+
+    <div class="my-auto">
+      <PreparationView
+        v-if="currentPhase === 'preparation' && isAnimationDone"
+      />
+      <BreathingView v-else-if="currentPhase === 'breathing'" />
     </div>
 
+    <!-- QUICK ACTIONS -->
+    <Transition name="fade" mode="out-in">
+      <div v-if="currentPhase === 'before'">
+        <QuickActions class="mt-auto" />
+        <Footer class="mt-4" />
+      </div>
+    </Transition>
+
     <!-- FOOTER -->
-    <Footer class="mt-4" />
   </div>
 </template>
 
@@ -29,9 +49,16 @@ import Navbar from "@/components/ui/navbar/Navbar.vue";
 import Footer from "@/components/ui/footer/Footer.vue";
 import QuickActions from "@/views/QuickActions.vue";
 import useBreathingSession from "@/composables/useBreathingSession";
-import StartButton from "@/components/ui/startButton/StartButton.vue";
+import StartButton from "@/views/StartButton.vue";
+import PreparationView from "@/views/PreparationView.vue";
+import { ref } from "vue";
+import BreathingView from "@/views/BreathingView.vue";
+import NavbarPlaceholder from "@/components/ui/navbar/NavbarPlaceholder.vue";
+import Toaster from "@/components/ui/toast/Toaster.vue";
 
 const { currentPhase } = useBreathingSession();
+
+const isAnimationDone = ref(false);
 </script>
 
 <style scoped lang="scss">
