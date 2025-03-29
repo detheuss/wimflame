@@ -45,8 +45,8 @@ interface SettingDefinition {
 const settingBs: SettingDefinition = {
   id: "breathingSpeed",
   label: "Breathing Speed",
-  min: 25,
-  max: 55,
+  min: 20,
+  max: 60,
   step: 1,
 };
 
@@ -54,7 +54,7 @@ const settingsDefaults: SettingDefinition[] = [
   {
     id: "breaths",
     label: "Breaths",
-    min: 10,
+    min: 15,
     max: 100,
     step: 5,
   },

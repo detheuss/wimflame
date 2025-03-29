@@ -23,7 +23,13 @@
 
 <script setup lang="ts">
 import useBreathingSession from "@/composables/useBreathingSession";
-import { computed, defineProps, onMounted, ref } from "vue";
+import {
+  playRandomBreatheIn,
+  playRandomBreatheOut,
+  playSpeech,
+  useAudio,
+} from "@/composables/useAudio";
+import { computed, defineProps, onBeforeUnmount, onMounted, ref } from "vue";
 
 // setting in breathing settings must be set to 35, because decimals are bugged
 const breathingSpeedSec = computed(() => {
@@ -49,6 +55,7 @@ const props = defineProps({
 });
 
 const { settings, currentPhase } = useBreathingSession();
+const { clearGuidanceAudioQuery, setGuidanceAudioQuery } = useAudio();
 
 const inhale = new Audio("/audio/sounds/inhale.mp3");
 const exhale = new Audio("/audio/sounds/exhale.mp3");
@@ -56,10 +63,12 @@ const exhale = new Audio("/audio/sounds/exhale.mp3");
 const isBreathingLoopPlaying = ref();
 
 const countBreaths = () => {
+  if (currentPhase.value !== "breathing") return;
   // exit - count ended
-  if (settings.breathing.breaths < currentBreath.value + 1) {
+  if (settings.breathing.breaths < currentBreath.value) {
     isBreathingLoopPlaying.value = false;
     currentPhase.value = "retention";
+
     return;
   }
 
@@ -84,12 +93,46 @@ const playBreathingLoop = () => {
   }, breathingSpeedMs.value);
 };
 
+const playBreathingGuidance = () => {
+  if (!isBreathingLoopPlaying.value) return;
+
+  clearGuidanceAudioQuery();
+
+  playRandomBreatheIn();
+
+  setGuidanceAudioQuery(() => {
+    playRandomBreatheOut();
+  }, breathingSpeedMs.value / 2);
+
+  setGuidanceAudioQuery(() => {
+    playSpeech("no-pause");
+  }, breathingSpeedMs.value * 5);
+
+  setGuidanceAudioQuery(() => {
+    if (!isBreathingLoopPlaying.value) return;
+    playSpeech("breath-flow");
+  }, breathingSpeedMs.value * 20);
+
+  setGuidanceAudioQuery(
+    () => {
+      playSpeech("last-breath");
+    },
+    breathingSpeedMs.value * (settings.breathing.breaths - 1) - 800,
+  );
+};
+
 onMounted(() => {
   if (!props.isPreview) {
     countBreaths();
     isBreathingLoopPlaying.value = true;
     playBreathingLoop();
+    playBreathingGuidance();
   }
+});
+
+onBeforeUnmount(() => {
+  isBreathingLoopPlaying.value = false;
+  clearGuidanceAudioQuery();
 });
 </script>
 

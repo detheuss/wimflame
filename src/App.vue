@@ -12,34 +12,43 @@
 
     <!-- APP -->
 
-    <Transition
-      name="fade-zoom"
-      mode="out-in"
-      @after-leave="isAnimationDone = true"
-    >
-      <div
-        v-if="currentPhase === 'before'"
-        class="my-auto flex h-full flex-1 flex-col items-center justify-center"
+    <div class="relative flex min-h-[400px] flex-1 items-center justify-center">
+      <Transition
+        name="fade-zoom"
+        mode="out-in"
+        @after-leave="isAnimationDone = true"
       >
-        <StartButton />
-      </div>
-    </Transition>
-
-    <div class="my-auto">
-      <PreparationView
-        v-if="currentPhase === 'preparation' && isAnimationDone"
-      />
-      <BreathingView v-else-if="currentPhase === 'breathing'" />
+        <StartButton v-if="currentPhase === 'before'" />
+        <PreparationView
+          v-else-if="currentPhase === 'preparation' && isAnimationDone"
+        />
+        <BreathingView v-else-if="currentPhase === 'breathing'" />
+        <RetentionView v-else-if="currentPhase === 'retention'" />
+      </Transition>
     </div>
 
     <!-- QUICK ACTIONS -->
-    <Transition name="fade" mode="out-in">
-      <div v-if="currentPhase === 'before'">
-        <QuickActions class="mt-auto" />
-        <Footer class="mt-4" />
-      </div>
-    </Transition>
-
+    <div class="h-[210px]">
+      <Transition name="fade" mode="out-in">
+        <div v-if="currentPhase === 'before'">
+          <QuickActions class="mt-auto" />
+          <Footer class="mt-4" />
+        </div>
+        <div
+          class="absolute bottom-0 left-0 flex w-full items-center justify-center p-5"
+          v-else
+        >
+          <Button
+            variant="outline"
+            class="w-full border-primary text-primary"
+            size="lg"
+            @click="handleCancelSession"
+          >
+            Cancel Session
+          </Button>
+        </div>
+      </Transition>
+    </div>
     <!-- FOOTER -->
   </div>
 </template>
@@ -55,8 +64,17 @@ import { ref } from "vue";
 import BreathingView from "@/views/BreathingView.vue";
 import NavbarPlaceholder from "@/components/ui/navbar/NavbarPlaceholder.vue";
 import Toaster from "@/components/ui/toast/Toaster.vue";
+import RetentionView from "@/views/RetentionView.vue";
+import Button from "@/components/ui/button/Button.vue";
+import { useAudio } from "@/composables/useAudio";
 
 const { currentPhase } = useBreathingSession();
+const { clearGuidanceAudioQuery } = useAudio();
+
+const handleCancelSession = () => {
+  clearGuidanceAudioQuery();
+  currentPhase.value = "before";
+};
 
 const isAnimationDone = ref(false);
 </script>

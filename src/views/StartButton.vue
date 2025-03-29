@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import useBreathingSession from "@/composables/useBreathingSession";
-import { playSound } from "@/composables/useMusicSounds";
+import { playSound } from "@/composables/useAudio";
 
 const { currentPhase } = useBreathingSession();
 
