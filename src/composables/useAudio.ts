@@ -1,7 +1,7 @@
 import { ref } from "vue";
 
 type WimflameSoundT = "gong" | "sonar" | "action" | "doppler" | "journey";
-type WimflameTrackT = "the-old-shaman";
+type WimflameTrackT = "the-old-shaman" | "music-1";
 type WimflameSpeechT =
   // Breathing cues
   | "breathe-in"

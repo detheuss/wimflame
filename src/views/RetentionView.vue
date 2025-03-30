@@ -6,7 +6,12 @@
 
 <script setup lang="ts">
 import Timer from "@/components/ui/timer/Timer.vue";
-import { playSound, playSpeech, useAudio } from "@/composables/useAudio";
+import {
+  playSound,
+  playSpeech,
+  playTrack,
+  useAudio,
+} from "@/composables/useAudio";
 import PhaseView from "@/views/PhaseView.vue";
 import { onBeforeUnmount, onMounted } from "vue";
 
@@ -65,6 +70,7 @@ const playRetentionGuidance = () => {
 
 onMounted(() => {
   playRetentionGuidance();
+  playTrack("music-1");
 });
 
 onBeforeUnmount(() => {
