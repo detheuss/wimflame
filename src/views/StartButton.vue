@@ -26,11 +26,13 @@
 import useBreathingSession from "@/composables/useBreathingSession";
 import { playSound } from "@/composables/useAudio";
 
-const { currentPhase } = useBreathingSession();
+const { currentPhase, settings } = useBreathingSession();
 
 const handleSessionStarted = () => {
   playSound("gong");
-  currentPhase.value = "preparation";
+  currentPhase.value = settings.breathing.pauseBeforeFirstRound
+    ? "preparation"
+    : "breathing";
 };
 
 defineProps({

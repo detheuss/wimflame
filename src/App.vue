@@ -12,7 +12,7 @@
 
     <!-- APP -->
 
-    <div class="relative flex min-h-[400px] flex-1 items-center justify-center">
+    <div class="relative flex min-h-[300px] flex-1 items-center justify-center">
       <Transition
         name="fade-zoom"
         mode="out-in"
@@ -35,9 +35,10 @@
           <Footer class="mt-4" />
         </div>
         <div
-          class="absolute bottom-0 left-0 flex w-full items-center justify-center p-5"
+          class="absolute bottom-0 left-0 flex w-full flex-col items-center justify-center p-5"
           v-else
         >
+          <Nexter />
           <Button
             variant="outline"
             class="w-full border-primary text-primary"
@@ -67,13 +68,15 @@ import Toaster from "@/components/ui/toast/Toaster.vue";
 import RetentionView from "@/views/RetentionView.vue";
 import Button from "@/components/ui/button/Button.vue";
 import { useAudio } from "@/composables/useAudio";
+import Nexter from "@/components/ui/nexter/Nexter.vue";
 
-const { currentPhase } = useBreathingSession();
+const { currentPhase, currentRound } = useBreathingSession();
 const { clearGuidanceAudioQuery } = useAudio();
 
 const handleCancelSession = () => {
   clearGuidanceAudioQuery();
   currentPhase.value = "before";
+  currentRound.value = 0;
 };
 
 const isAnimationDone = ref(false);

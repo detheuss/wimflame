@@ -1,17 +1,33 @@
 import { ref } from "vue";
 
-type WimflameSoundT = "gong" | "sonar";
+type WimflameSoundT = "gong" | "sonar" | "action" | "doppler" | "journey";
 type WimflameTrackT = "the-old-shaman";
 type WimflameSpeechT =
-  | "breath-flow"
-  | "breathe-in-2"
+  // Breathing cues
   | "breathe-in"
-  | "breathe-out-2"
+  | "breathe-in-2"
   | "breathe-out"
-  | "last-breath"
+  | "breathe-out-2"
+  | "breath-flow"
+
+  // Time markers
+  | "one-minute"
+  | "two-minutes"
+  | "three-minutes"
+  | "four-minutes"
+  | "five-minutes"
+
+  // Retention phases
+  | "retention"
+  | "retention-1"
+  | "retention-2"
+  | "retention-3"
+  | "retention-4"
+
+  // Transitional/ending cues
   | "no-pause"
-  | "recovery-in"
-  | "retention";
+  | "last-breath"
+  | "recovery-in";
 
 // plays sound and returns the sound object
 export const playSound = (soundName: WimflameSoundT) => {

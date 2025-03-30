@@ -32,14 +32,42 @@ export type SessionSettings = {
 export type BreathingSettingsKey = keyof BreathingSettingsT;
 
 export type BreathingSessionPhaseT =
-  | "preparation"
   | "before"
-  | "break"
+  | "preparation"
   | "breathing"
   | "retention"
-  | "recovery";
+  | "recovery"
+  | "break";
 
 const currentPhase: Ref<BreathingSessionPhaseT> = ref("before");
+
+const currentRound: Ref<number> = ref(0);
+
+const phases: BreathingSessionPhaseT[] = [
+  "before",
+  "preparation",
+  "breathing",
+  "retention",
+  "recovery",
+  "break",
+];
+
+const goToNextPhase = () => {
+  const nextItemIndex =
+    phases.findIndex((item) => item == currentPhase.value) + 1;
+
+  let nextPhase = phases[nextItemIndex];
+
+  if (!nextPhase) {
+    // undefined nextPhase indicates we are at "break"
+    nextPhase =
+      currentRound.value == settings.breathing.rounds // currentRound is increased onMounted in BreathingView
+        ? "before" // this was last round, we go back to Home Screen
+        : "breathing"; // not the last round, we go to next phase
+  }
+
+  currentPhase.value = nextPhase ?? "breathing";
+};
 
 export const DEFAULT_BREATHING_SETTINGS: BreathingSettingsT = {
   breathingSpeed: 35,
@@ -115,9 +143,11 @@ const useBreathingSession = () => {
   });
   return {
     currentPhase,
+    currentRound,
     settings,
     resetBreathingSettings,
     saveSettingsToLS,
+    goToNextPhase,
   };
 };
 
