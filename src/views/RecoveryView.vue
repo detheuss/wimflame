@@ -19,7 +19,7 @@ import {
 } from "@/composables/useAudio";
 import useBreathingSession from "@/composables/useBreathingSession";
 import PhaseView from "@/views/PhaseView.vue";
-import { onBeforeMount, onBeforeUnmount, onMounted, onUnmounted } from "vue";
+import { onBeforeMount, onBeforeUnmount, onMounted } from "vue";
 
 const { settings, goToNextPhase } = useBreathingSession();
 const { clearGuidanceAudioQuery } = useAudio();
