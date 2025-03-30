@@ -53,6 +53,14 @@ const phases: BreathingSessionPhaseT[] = [
 ];
 
 const goToNextPhase = () => {
+  // this is done to avoid bugs if phase ends in setTimeout (e.g. the RecoveryView)
+  if (currentPhase.value == "before") {
+    console.warn(
+      "Not proceeding to next phase because current phase is 'before'",
+      "Use direct assignment to currentPhase value in order to start the session.",
+    );
+  }
+
   const nextItemIndex =
     phases.findIndex((item) => item == currentPhase.value) + 1;
 
@@ -64,6 +72,14 @@ const goToNextPhase = () => {
       currentRound.value == settings.breathing.rounds // currentRound is increased onMounted in BreathingView
         ? "before" // this was last round, we go back to Home Screen
         : "breathing"; // not the last round, we go to next phase
+  }
+
+  if (currentRound.value === settings.breathing.rounds) {
+    nextPhase = "before";
+  }
+
+  if (nextPhase === "break" && !settings.breathing.pauseBetweenRounds) {
+    nextPhase = phases[nextItemIndex + 1];
   }
 
   currentPhase.value = nextPhase ?? "breathing";

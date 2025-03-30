@@ -14,11 +14,12 @@
 
 <script setup lang="ts">
 import { secondsToMinutes } from "@/utils/utils";
-import { computed, onMounted, ref, type Ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, type Ref } from "vue";
 
 const props = defineProps<{
-  isCountdown?: boolean;
   timeToCount?: number;
+  isCountdown?: boolean;
+  id?: string;
 }>();
 
 const currentTimeCount: Ref<number | null> = ref(null);
@@ -27,7 +28,10 @@ const displayTime = computed(() => secondsToMinutes(currentTimeCount.value));
 
 const emit = defineEmits(["onTimeReached"]);
 
+const isCountingForceStopped = ref(false);
+
 const handleTimeCount = () => {
+  if (isCountingForceStopped.value) return;
   if (currentTimeCount.value == null) return;
   if (
     // counted to 0, OR
@@ -44,10 +48,21 @@ const handleTimeCount = () => {
   setTimeout(() => handleTimeCount(), 1000);
 };
 
+const timeToCountAdjusted = ref(
+  props.isCountdown
+    ? (props.timeToCount ?? 0 + 1)
+    : (props.timeToCount ?? 0 - 1),
+);
+
 onMounted(() => {
-  currentTimeCount.value = props.isCountdown ? (props.timeToCount ?? 0 + 1) : 0;
+  currentTimeCount.value = props.isCountdown ? timeToCountAdjusted.value : 0;
 
   handleTimeCount();
+});
+
+onBeforeUnmount(() => {
+  isCountingForceStopped.value = true;
+  currentTimeCount.value = 0;
 });
 </script>
 

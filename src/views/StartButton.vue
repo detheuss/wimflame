@@ -24,12 +24,12 @@
 
 <script setup lang="ts">
 import useBreathingSession from "@/composables/useBreathingSession";
-import { playSound } from "@/composables/useAudio";
+import { playSound, playUnconstrainedSound } from "@/composables/useAudio";
 
 const { currentPhase, settings } = useBreathingSession();
 
 const handleSessionStarted = () => {
-  playSound("gong");
+  playUnconstrainedSound("gong");
   currentPhase.value = settings.breathing.pauseBeforeFirstRound
     ? "preparation"
     : "breathing";

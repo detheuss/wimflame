@@ -1,23 +1,21 @@
 <template>
-  <PhaseView message="BREATHE">
-    <Breather is-counting />
+  <PhaseView message="TAKE A BREAK">
+    <Timer
+      is-countdown
+      :time-to-count="settings.breathing.pauseBetweenRounds"
+    />
   </PhaseView>
 </template>
 
 <script setup lang="ts">
-import Breather from "@/components/ui/breather/Breather.vue";
+import Timer from "@/components/ui/timer/Timer.vue";
 import { stopAllConstrainedAudio, useAudio } from "@/composables/useAudio";
 import useBreathingSession from "@/composables/useBreathingSession";
 import PhaseView from "@/views/PhaseView.vue";
-import { onBeforeMount, onBeforeUnmount, onMounted } from "vue";
+import { onBeforeMount, onBeforeUnmount } from "vue";
 
-const { currentRound } = useBreathingSession();
 const { clearGuidanceAudioQuery } = useAudio();
-
-onMounted(() => {
-  currentRound.value++;
-  console.log("breathing round", currentRound.value);
-});
+const { settings } = useBreathingSession();
 
 onBeforeMount(() => {
   clearGuidanceAudioQuery();

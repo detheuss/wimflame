@@ -1,6 +1,6 @@
 <template>
   <PhaseView message="HOLD">
-    <Timer />
+    <Timer id="retention"/>
   </PhaseView>
 </template>
 
@@ -10,12 +10,14 @@ import {
   playSound,
   playSpeech,
   playTrack,
+  stopAllConstrainedAudio,
   useAudio,
 } from "@/composables/useAudio";
 import PhaseView from "@/views/PhaseView.vue";
-import { onBeforeUnmount, onMounted } from "vue";
+import { onBeforeMount, onBeforeUnmount, onMounted } from "vue";
 
 const { clearGuidanceAudioQuery, setGuidanceAudioQuery } = useAudio();
+
 const playRetentionGuidance = () => {
   clearGuidanceAudioQuery();
   /**
@@ -73,8 +75,14 @@ onMounted(() => {
   playTrack("music-1");
 });
 
+onBeforeMount(() => {
+  clearGuidanceAudioQuery();
+  stopAllConstrainedAudio();
+});
+
 onBeforeUnmount(() => {
   clearGuidanceAudioQuery();
+  stopAllConstrainedAudio();
 });
 </script>
 

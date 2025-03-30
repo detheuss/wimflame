@@ -24,6 +24,8 @@
         />
         <BreathingView v-else-if="currentPhase === 'breathing'" />
         <RetentionView v-else-if="currentPhase === 'retention'" />
+        <RecoveryView v-else-if="currentPhase === 'recovery'" />
+        <BreakView v-else-if="currentPhase === 'break'" />
       </Transition>
     </div>
 
@@ -67,14 +69,17 @@ import NavbarPlaceholder from "@/components/ui/navbar/NavbarPlaceholder.vue";
 import Toaster from "@/components/ui/toast/Toaster.vue";
 import RetentionView from "@/views/RetentionView.vue";
 import Button from "@/components/ui/button/Button.vue";
-import { useAudio } from "@/composables/useAudio";
+import { stopAllConstrainedAudio, useAudio } from "@/composables/useAudio";
 import Nexter from "@/components/ui/nexter/Nexter.vue";
+import RecoveryView from "@/views/RecoveryView.vue";
+import BreakView from "@/views/BreakView.vue";
 
 const { currentPhase, currentRound } = useBreathingSession();
 const { clearGuidanceAudioQuery } = useAudio();
 
 const handleCancelSession = () => {
   clearGuidanceAudioQuery();
+  stopAllConstrainedAudio();
   currentPhase.value = "before";
   currentRound.value = 0;
 };

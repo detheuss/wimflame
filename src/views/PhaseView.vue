@@ -20,15 +20,20 @@
 </template>
 
 <script setup lang="ts">
-import { playSound } from "@/composables/useAudio";
+import {
+  playUnconstrainedSound,
+  stopAllConstrainedAudio,
+  useAudio,
+} from "@/composables/useAudio";
 import useBreathingSession from "@/composables/useBreathingSession";
-import { computed, onBeforeUnmount } from "vue";
+import { computed, onBeforeMount, onBeforeUnmount } from "vue";
 
 defineProps<{
   message: string;
 }>();
 
 const { settings } = useBreathingSession();
+const { clearGuidanceAudioQuery } = useAudio();
 
 const breathingSpeedSec = computed(() => {
   return settings.breathing?.breathingSpeed
@@ -37,7 +42,17 @@ const breathingSpeedSec = computed(() => {
 });
 
 onBeforeUnmount(() => {
-  playSound("action");
+  playUnconstrainedSound("gong");
+});
+
+onBeforeMount(() => {
+  clearGuidanceAudioQuery();
+  stopAllConstrainedAudio();
+});
+
+onBeforeUnmount(() => {
+  clearGuidanceAudioQuery();
+  stopAllConstrainedAudio();
 });
 </script>
 
