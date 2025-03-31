@@ -58,8 +58,8 @@ const props = defineProps({
 const { settings, currentPhase } = useBreathingSession();
 const { clearGuidanceAudioQuery, setGuidanceAudioQuery } = useAudio();
 
-const inhale = createConstrainedAudio("/audio/sounds/inhale.mp3");
-const exhale = createConstrainedAudio("/audio/sounds/exhale.mp3");
+const inhale = createConstrainedAudio("/audio/sounds/inhale.mp3", "inhale");
+const exhale = createConstrainedAudio("/audio/sounds/exhale.mp3", "exhale");
 
 const isBreathingLoopPlaying = ref();
 

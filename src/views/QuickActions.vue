@@ -22,6 +22,7 @@
         @on-confirm-action="handleSaveSettings"
         is-confirm-btn-hidden
       >
+        <MusicSettings />
       </WFDrawer>
 
       <!-- INSTALLER -->
@@ -36,6 +37,7 @@ import BreathingSettings from "@/components/ui/setting/BreathingSettings.vue";
 import Installer from "@/components/ui/installer/Installer.vue";
 import { useToast } from "@/components/ui/toast/use-toast";
 import useBreathingSession from "@/composables/useBreathingSession";
+import MusicSettings from "@/components/ui/setting/MusicSettings.vue";
 
 const { saveSettingsToLS } = useBreathingSession();
 const { toast } = useToast();

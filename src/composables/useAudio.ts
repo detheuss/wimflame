@@ -1,7 +1,12 @@
 import { ref, type Ref } from "vue";
 
-type WimflameSoundT = "gong" | "sonar" | "action" | "doppler" | "journey";
-type WimflameTrackT = "the-old-shaman" | "music-1";
+export type WimflameSoundT =
+  | "gong"
+  | "sonar"
+  | "action"
+  | "doppler"
+  | "journey";
+export type WimflameTrackIdT = "into-the-void" | "with-frost-by-my-side";
 type WimflameSpeechT =
   // Breathing cues
   | "breathe-in"
@@ -32,10 +37,32 @@ type WimflameSpeechT =
 // plays sound and returns the sound object
 export const playSound = (soundName: WimflameSoundT) => {
   const relativePath = `audio/sounds/${soundName}.mp3`;
-  const audio = createConstrainedAudio(relativePath);
+  const audio = createConstrainedAudio(relativePath, soundName);
   audio.play();
   return audio;
 };
+
+export type WimflameMusicTrackT = {
+  id: WimflameTrackIdT; // fileName without extension
+  title: string;
+  author: string;
+};
+
+export const WIMFLAME_MUSIC_TRACKS: WimflameMusicTrackT[] = [
+  {
+    id: "into-the-void",
+    title: "Into The Void",
+    author: "kalsstockmedia",
+  },
+  {
+    id: "with-frost-by-my-side",
+    title: "With Frost By My Side",
+    author: "kalsstockmedia",
+  },
+];
+
+export const findMusicTrack = (id: WimflameTrackIdT) =>
+  WIMFLAME_MUSIC_TRACKS.find((item) => item.id == id);
 
 /**Used for button sounds that I don't want to stop between phases */
 export const playUnconstrainedSound = (soundName: WimflameSoundT) => {
@@ -45,22 +72,23 @@ export const playUnconstrainedSound = (soundName: WimflameSoundT) => {
   return audio;
 };
 
-export const playTrack = (trackName: WimflameTrackT) => {
+export const playTrack = (trackName: WimflameTrackIdT) => {
   const relativePath = `audio/tracks/${trackName}.mp3`;
-  const audio = createConstrainedAudio(relativePath);
+  const audio = createConstrainedAudio(relativePath, trackName);
   audio.play();
   return audio;
 };
 
 export const playSpeech = (speechName: WimflameSpeechT) => {
   const relativePath = `audio/speech/${speechName}.mp3`;
-  const audio = createConstrainedAudio(relativePath);
+  const audio = createConstrainedAudio(relativePath, speechName);
   audio.play();
   return audio;
 };
 
-export const createConstrainedAudio = (relativePath: string) => {
+export const createConstrainedAudio = (relativePath: string, id: string) => {
   const audio = new Audio(relativePath);
+  audio.id = id;
   audio.onended = () => removeFromCurrentlyPlaying(audio);
   currentlyPlaying.value.add(audio);
   return audio;
@@ -76,7 +104,7 @@ export const playRandomBreatheOut = () => {
   playSpeech(options[Math.floor(Math.random() * options.length)]);
 };
 
-export const currentlyPlaying: Ref<Set<HTMLAudioElement>> = ref(new Set());
+const currentlyPlaying: Ref<Set<HTMLAudioElement>> = ref(new Set());
 
 const removeFromCurrentlyPlaying = (audio: HTMLAudioElement) => {
   currentlyPlaying.value.delete(audio);
@@ -110,5 +138,6 @@ export const useAudio = () => {
     guidanceAudioQuery,
     setGuidanceAudioQuery,
     clearGuidanceAudioQuery,
+    currentlyPlaying,
   };
 };

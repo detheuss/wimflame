@@ -1,4 +1,5 @@
 import { useToast } from "@/components/ui/toast";
+import type { WimflameSoundT, WimflameTrackIdT } from "@/composables/useAudio";
 import { onMounted, reactive, ref, type Reactive, type Ref } from "vue";
 
 const getErrorToast = (e: any) => {
@@ -20,13 +21,24 @@ export type BreathingSettingsT = {
 };
 
 export type MusicSettingsT = {
-  gongName: string;
-  trackName: string;
+  trackId: WimflameTrackIdT;
+  soundId: WimflameSoundT;
+  volumes: {
+    music: number;
+    speech: number;
+    sounds: number;
+  };
+  preferences: {
+    isMusicFromBreathing: boolean;
+    isMusicFromRetention: boolean;
+    isSoundPlayed: boolean;
+    isGuidancePlayed: boolean;
+  };
 };
 
 export type SessionSettings = {
   breathing: BreathingSettingsT;
-  music?: MusicSettingsT;
+  audio: MusicSettingsT;
 };
 
 export type BreathingSettingsKey = keyof BreathingSettingsT;
@@ -95,13 +107,24 @@ export const DEFAULT_BREATHING_SETTINGS: BreathingSettingsT = {
 };
 
 export const DEFAULT_MUSIC_SETTINGS: MusicSettingsT = {
-  gongName: "gong",
-  trackName: "the-old-shaman",
+  trackId: "into-the-void",
+  soundId: "gong",
+  volumes: {
+    music: 80,
+    speech: 80,
+    sounds: 80,
+  },
+  preferences: {
+    isMusicFromBreathing: false,
+    isMusicFromRetention: true,
+    isSoundPlayed: true,
+    isGuidancePlayed: true,
+  },
 };
 
 const settings: Reactive<SessionSettings> = reactive({
   breathing: { ...DEFAULT_BREATHING_SETTINGS },
-  music: { ...DEFAULT_MUSIC_SETTINGS },
+  audio: { ...DEFAULT_MUSIC_SETTINGS },
 });
 
 const loadSettingsFromLS = () => {
@@ -118,10 +141,10 @@ const loadSettingsFromLS = () => {
         ...parsedFromLS.breathing,
       };
     }
-    if (parsedFromLS.music) {
-      settings.music = {
+    if (parsedFromLS.audio) {
+      settings.audio = {
         ...DEFAULT_MUSIC_SETTINGS,
-        ...parsedFromLS.music,
+        ...parsedFromLS.audio,
       };
     }
   } catch (e) {
