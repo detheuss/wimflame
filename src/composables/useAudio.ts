@@ -1,12 +1,13 @@
+import useBreathingSession from "@/composables/useBreathingSession";
 import { ref, type Ref } from "vue";
 
-export type WimflameSoundT =
+export type WimflameSoundEffectIdT =
   | "gong"
   | "sonar"
   | "action"
   | "doppler"
   | "journey";
-export type WimflameTrackIdT = "into-the-void" | "with-frost-by-my-side";
+export type WimflameMusicTrackIdT = "into-the-void" | "with-frost-by-my-side";
 type WimflameSpeechT =
   // Breathing cues
   | "breathe-in"
@@ -34,16 +35,8 @@ type WimflameSpeechT =
   | "last-breath"
   | "recovery-in";
 
-// plays sound and returns the sound object
-export const playSound = (soundName: WimflameSoundT) => {
-  const relativePath = `audio/sounds/${soundName}.mp3`;
-  const audio = createConstrainedAudio(relativePath, soundName);
-  audio.play();
-  return audio;
-};
-
 export type WimflameMusicTrackT = {
-  id: WimflameTrackIdT; // fileName without extension
+  id: WimflameMusicTrackIdT; // fileName without extension
   title: string;
   author: string;
 };
@@ -56,32 +49,55 @@ export const WIMFLAME_MUSIC_TRACKS: WimflameMusicTrackT[] = [
   },
   {
     id: "with-frost-by-my-side",
-    title: "With Frost By My Side",
+    title: "Frost By My Side",
     author: "kalsstockmedia",
   },
 ];
 
-export const findMusicTrack = (id: WimflameTrackIdT) =>
-  WIMFLAME_MUSIC_TRACKS.find((item) => item.id == id);
+export type WimflameSoundEffectsT = {
+  id: WimflameSoundEffectIdT;
+  title: string;
+  author?: string;
+};
+
+export const WIMFLAME_SOUND_EFFECTS: WimflameSoundEffectsT[] = [
+  {
+    id: "gong",
+    title: "Gong",
+  },
+  {
+    id: "doppler",
+    title: "Doppler",
+  },
+  {
+    id: "sonar",
+    title: "Sonar",
+  },
+  {
+    id: "action",
+    title: "Action",
+  },
+  {
+    id: "journey",
+    title: "Journey",
+  },
+];
+
+export const findAudio = (
+  id: WimflameMusicTrackIdT | WimflameSoundEffectIdT,
+  isMusicTrack?: boolean,
+) => {
+  const searchingIn = isMusicTrack
+    ? WIMFLAME_MUSIC_TRACKS
+    : WIMFLAME_SOUND_EFFECTS;
+
+  return searchingIn.find((item) => item.id == id);
+};
 
 /**Used for button sounds that I don't want to stop between phases */
-export const playUnconstrainedSound = (soundName: WimflameSoundT) => {
+export const playUnconstrainedSound = (soundName: WimflameSoundEffectIdT) => {
   const relativePath = `audio/sounds/${soundName}.mp3`;
   const audio = new Audio(relativePath);
-  audio.play();
-  return audio;
-};
-
-export const playTrack = (trackName: WimflameTrackIdT) => {
-  const relativePath = `audio/tracks/${trackName}.mp3`;
-  const audio = createConstrainedAudio(relativePath, trackName);
-  audio.play();
-  return audio;
-};
-
-export const playSpeech = (speechName: WimflameSpeechT) => {
-  const relativePath = `audio/speech/${speechName}.mp3`;
-  const audio = createConstrainedAudio(relativePath, speechName);
   audio.play();
   return audio;
 };
@@ -92,16 +108,6 @@ export const createConstrainedAudio = (relativePath: string, id: string) => {
   audio.onended = () => removeFromCurrentlyPlaying(audio);
   currentlyPlaying.value.add(audio);
   return audio;
-};
-
-export const playRandomBreatheIn = () => {
-  const options: WimflameSpeechT[] = ["breathe-in", "breathe-in-2"];
-  playSpeech(options[Math.floor(Math.random() * options.length)]);
-};
-
-export const playRandomBreatheOut = () => {
-  const options: WimflameSpeechT[] = ["breathe-out", "breathe-out-2"];
-  playSpeech(options[Math.floor(Math.random() * options.length)]);
 };
 
 const currentlyPlaying: Ref<Set<HTMLAudioElement>> = ref(new Set());
@@ -121,6 +127,41 @@ export const stopAllConstrainedAudio = () => {
 export const useAudio = () => {
   const guidanceAudioQuery = ref<Set<ReturnType<typeof setTimeout>>>(new Set());
 
+  const { settings } = useBreathingSession();
+
+  // plays sound and returns the sound object
+  const playSound = (soundName: WimflameSoundEffectIdT) => {
+    const relativePath = `audio/sounds/${soundName}.mp3`;
+    const audio = createConstrainedAudio(relativePath, soundName);
+    audio.play();
+    return audio;
+  };
+
+  const playTrack = (trackName: WimflameMusicTrackIdT) => {
+    const relativePath = `audio/tracks/${trackName}.mp3`;
+    const audio = createConstrainedAudio(relativePath, trackName);
+    audio.volume = settings.audio.volumes.music / 100;
+    audio.play();
+    return audio;
+  };
+
+  const playSpeech = (speechName: WimflameSpeechT) => {
+    const relativePath = `audio/speech/${speechName}.mp3`;
+    const audio = createConstrainedAudio(relativePath, speechName);
+    audio.play();
+    return audio;
+  };
+
+  const playRandomBreatheIn = () => {
+    const options: WimflameSpeechT[] = ["breathe-in", "breathe-in-2"];
+    playSpeech(options[Math.floor(Math.random() * options.length)]);
+  };
+
+  const playRandomBreatheOut = () => {
+    const options: WimflameSpeechT[] = ["breathe-out", "breathe-out-2"];
+    playSpeech(options[Math.floor(Math.random() * options.length)]);
+  };
+
   const setGuidanceAudioQuery = (fn: () => void, delay: number) => {
     const id = setTimeout(() => {
       guidanceAudioQuery.value.delete(id); // Clean up after it runs
@@ -139,5 +180,10 @@ export const useAudio = () => {
     setGuidanceAudioQuery,
     clearGuidanceAudioQuery,
     currentlyPlaying,
+    playSound,
+    playTrack,
+    playSpeech,
+    playRandomBreatheIn,
+    playRandomBreatheOut,
   };
 };

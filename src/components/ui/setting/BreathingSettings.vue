@@ -3,14 +3,14 @@
     <Breather is-preview />
   </div>
   <!-- prettier-ignore -->
-  <Setting
+  <SettingSlider
     :key="settingBs.id"
     v-bind="(settingBs as any)"
     is-decimal
   />
 
   <!-- prettier-ignore -->
-  <Setting
+  <SettingSlider
     v-for="setting in settingsDefaults"
     :key="setting.id"
     v-bind="(setting as any)"
@@ -28,9 +28,9 @@
 
 <script setup lang="ts">
 import Breather from "@/components/ui/breather/Breather.vue";
-import Setting from "@/components/ui/setting/Setting.vue";
 import Button from "@/components/ui/button/Button.vue";
 import useBreathingSession from "@/composables/useBreathingSession";
+import SettingSlider from "@/components/ui/setting/SettingSlider.vue";
 
 const { resetBreathingSettings } = useBreathingSession();
 

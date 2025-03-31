@@ -11,19 +11,14 @@
 
 <script setup lang="ts">
 import Timer from "@/components/ui/timer/Timer.vue";
-import {
-  playRandomBreatheOut,
-  playSpeech,
-  stopAllConstrainedAudio,
-  useAudio,
-} from "@/composables/useAudio";
+import { stopAllConstrainedAudio, useAudio } from "@/composables/useAudio";
 import useBreathingSession from "@/composables/useBreathingSession";
 import PhaseView from "@/views/PhaseView.vue";
 import { onBeforeMount, onBeforeUnmount, onMounted } from "vue";
 
 const { settings, goToNextPhase } = useBreathingSession();
 const { clearGuidanceAudioQuery } = useAudio();
-
+const { playRandomBreatheOut, playSpeech } = useAudio();
 const playRecoveryGuidance = () => {
   clearGuidanceAudioQuery();
   playSpeech("recovery-in");

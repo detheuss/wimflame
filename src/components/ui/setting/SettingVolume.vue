@@ -2,11 +2,13 @@
   <div class="flex flex-col">
     <label :for="id">{{ label }}</label>
     <div class="flex gap-3">
+      <!--prettier-ignore-->
       <Slider
-        v-bind="props as any"
+        v-bind="(props as any)"
         v-model:modelValue="localValue"
         :id="`${id}-slider`"
         @valueCommit="handleValueCommit"
+       
       />
 
       <div
@@ -20,11 +22,14 @@
 
 <script setup lang="ts">
 import Slider from "@/components/ui/slider/Slider.vue";
-import useBreathingSession, { type MusicSettingsT } from "@/composables/useBreathingSession";
+import { useAudio } from "@/composables/useAudio";
+import useBreathingSession, {
+  type MusicSettingsT,
+} from "@/composables/useBreathingSession";
 import { computed, ref, watch } from "vue";
 
 const { settings, saveSettingsToLS } = useBreathingSession();
-
+const { currentlyPlaying } = useAudio();
 const props = defineProps<{
   id: keyof MusicSettingsT["volumes"];
   label?: string;
@@ -45,9 +50,18 @@ watch(
 
 const displayValue = computed(() => localValue.value[0].toString());
 
+//@TODO this is ugly, but will work for now - BUT this relies on only one track playing! Else it gets buggy
+const setVolumeOfCurrentlyPlaying = () => {
+  currentlyPlaying.value.forEach((item) => {
+    item.volume = localValue.value[0] / 100;
+  });
+};
+
 const handleValueCommit = () => {
   if (!localValue.value?.length) return;
   settings.audio.volumes[props.id] = localValue.value[0];
+
+  setVolumeOfCurrentlyPlaying();
   saveSettingsToLS();
 };
 </script>

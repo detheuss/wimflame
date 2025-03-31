@@ -1,7 +1,7 @@
 <template>
-  <Drawer :handleOnly="true">
+  <Drawer :handleOnly="true" @update:open="stopAllConstrainedAudio">
     <div class="flex w-full gap-2">
-      <DrawerTrigger class="flex-1">
+      <DrawerTrigger as-child class="flex-1">
         <Button class="w-full" size="lg" :variant="triggerVariant ?? 'outline'">
           {{ triggerLabel }}
         </Button>
@@ -22,7 +22,7 @@
 
       <DrawerFooter class="flex w-full flex-col">
         <div class="flex items-center justify-center gap-2">
-          <DrawerClose class="flex-1">
+          <DrawerClose as-child class="flex-1">
             <Button size="lg" variant="outline" class="w-full">
               {{ cancelCta ?? "Close" }}
             </Button>
@@ -51,6 +51,7 @@ import DrawerTitle from "@/components/ui/drawer/DrawerTitle.vue";
 import DrawerDescription from "@/components/ui/drawer/DrawerDescription.vue";
 import DrawerFooter from "@/components/ui/drawer/DrawerFooter.vue";
 import { DrawerClose, DrawerTrigger } from "vaul-vue";
+import { stopAllConstrainedAudio } from "@/composables/useAudio";
 // import QuasiHandle from "@/components/ui/quasihandle/QuasiHandle.vue";
 // import { ref } from "vue";
 

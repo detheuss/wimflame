@@ -1,5 +1,8 @@
 import { useToast } from "@/components/ui/toast";
-import type { WimflameSoundT, WimflameTrackIdT } from "@/composables/useAudio";
+import type {
+  WimflameSoundEffectIdT,
+  WimflameMusicTrackIdT,
+} from "@/composables/useAudio";
 import { onMounted, reactive, ref, type Reactive, type Ref } from "vue";
 
 const getErrorToast = (e: any) => {
@@ -21,8 +24,8 @@ export type BreathingSettingsT = {
 };
 
 export type MusicSettingsT = {
-  trackId: WimflameTrackIdT;
-  soundId: WimflameSoundT;
+  trackId: WimflameMusicTrackIdT;
+  soundId: WimflameSoundEffectIdT;
   volumes: {
     music: number;
     speech: number;
