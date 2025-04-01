@@ -48,7 +48,7 @@ defineProps({
   },
   startCta: {
     type: String,
-    default: "Starttt",
+    default: "Start",
   },
 });
 </script>

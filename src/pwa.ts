@@ -20,7 +20,7 @@
 
 import { registerSW } from "virtual:pwa-register";
 
-const intervalMS = 60 * 1000;
+const intervalMS = 60 * 60 * 1000;
 
 export const updateSW = registerSW({
   onRegisteredSW(swUrl, r) {
