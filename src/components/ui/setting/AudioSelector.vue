@@ -5,24 +5,27 @@
         triggerLabel
       }}</Button>
     </DialogTrigger>
-    <DialogContent>
+    <DialogContent class="flex h-[80%] flex-col">
       <DialogHeader>
         <DialogTitle>Music</DialogTitle>
         <DialogDescription> Select music for your session.</DialogDescription>
       </DialogHeader>
-
-      <AudioView
-        v-for="track in audioTracks"
-        :audioId="track.id"
-        isMusicTrack
-        :class="{ 'outline outline-primary': checkIsSelectedAudio(track.id) }"
-      />
-      <DialogFooter class="flex flex-col gap-4">
+      <div
+        class="flex max-h-full flex-1 flex-col gap-4 overflow-y-auto rounded-lg border p-3"
+      >
+        <AudioView
+          v-for="track in audioTracks"
+          :audioId="track.id"
+          :isMusicTrack="isMusicTrackSelector"
+          :class="{ 'outline outline-primary': checkIsSelectedAudio(track.id) }"
+        />
+      </div>
+      <DialogFooter class="flex !flex-col gap-4">
         <DialogClose as-child>
-          <Button size="lg" @click="isDialogOpen = false">Done</Button>
+          <Button size="lg" @click="isDialogOpen = false">Close</Button>
         </DialogClose>
 
-        <SpecialEndorsement />
+        <SpecialEndorsement v-if="isMusicTrackSelector" />
       </DialogFooter>
     </DialogContent>
   </Dialog>

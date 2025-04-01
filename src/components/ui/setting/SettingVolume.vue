@@ -8,7 +8,8 @@
         v-model:modelValue="localValue"
         :id="`${id}-slider`"
         @valueCommit="handleValueCommit"
-       
+        :min="0"
+        :max="100"
       />
 
       <div
@@ -29,7 +30,7 @@ import useBreathingSession, {
 import { computed, ref, watch } from "vue";
 
 const { settings, saveSettingsToLS } = useBreathingSession();
-const { currentlyPlaying } = useAudio();
+const { currentlyPlaying, playSpeech } = useAudio();
 const props = defineProps<{
   id: keyof MusicSettingsT["volumes"];
   label?: string;
@@ -62,6 +63,9 @@ const handleValueCommit = () => {
   settings.audio.volumes[props.id] = localValue.value[0];
 
   setVolumeOfCurrentlyPlaying();
+
+  if (props.id == "speech") playSpeech("no-pause");
+
   saveSettingsToLS();
 };
 </script>

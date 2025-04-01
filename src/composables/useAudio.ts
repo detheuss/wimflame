@@ -133,6 +133,7 @@ export const useAudio = () => {
   const playSound = (soundName: WimflameSoundEffectIdT) => {
     const relativePath = `audio/sounds/${soundName}.mp3`;
     const audio = createConstrainedAudio(relativePath, soundName);
+    audio.volume = settings.audio.volumes.sounds / 100;
     audio.play();
     return audio;
   };
@@ -148,6 +149,7 @@ export const useAudio = () => {
   const playSpeech = (speechName: WimflameSpeechT) => {
     const relativePath = `audio/speech/${speechName}.mp3`;
     const audio = createConstrainedAudio(relativePath, speechName);
+    audio.volume = settings.audio.volumes.speech / 100;
     audio.play();
     return audio;
   };

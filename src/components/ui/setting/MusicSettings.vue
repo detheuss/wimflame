@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-4">
     <div class="flex flex-col gap-3">
-      <Separator label="Music" class="mb-5 mt-2" />
+      <Separator label="Music" class="mb-6 mt-4" />
       <AudioView is-music-track :audioId="settings.audio.trackId" />
       <SettingVolume id="music" />
       <AudioSelector
@@ -20,11 +20,28 @@
         v-model="settings.audio.preferences.isMusicFromRetention"
       />
     </div>
-    <div>
-      <Separator label="Sound effects" class="mb-5 mt-2" />
+    <div class="flex flex-col gap-3">
+      <Separator label="Sound effects" class="mb-6 mt-4" />
+      <AudioView :audio-id="settings.audio.soundId" />
+      <SettingVolume id="sounds" />
+      <AudioSelector
+        class="pointer-events-auto"
+        trigger-label="Change Sound Effect"
+      />
+      <SettingSwitch
+        id="isSoundPlayed"
+        label="Play sound effect"
+        v-model="settings.audio.preferences.isSoundPlayed"
+      />
     </div>
-    <div>
-      <Separator label="Speech guidance" class="mb-5 mt-2" />
+    <div class="flex flex-col gap-3">
+      <Separator label="Speech guidance" class="mb-6 mt-4" />
+      <SettingSwitch
+        id="isGuidancePlayed"
+        label="Play guidance"
+        v-model="settings.audio.preferences.isGuidancePlayed"
+      />
+      <SettingVolume id="speech" />
     </div>
   </div>
 </template>
