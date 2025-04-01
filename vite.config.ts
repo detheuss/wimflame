@@ -19,9 +19,6 @@ export default defineConfig({
     svgLoader(),
     VitePWA({
       registerType: "prompt",
-      devOptions: {
-        enabled: true,
-      },
       manifest: {
         name: "Wimflame: All the Love, All the Power.",
         short_name: "Wimflame",
