@@ -1,6 +1,5 @@
 <template>
   <Toaster />
-  <UpdateModal />
 
   <div
     class="relative mx-auto flex max-h-screen min-h-[100dvh] w-full max-w-md flex-col overflow-hidden p-5 lg:border"
@@ -97,7 +96,6 @@ watch(isSessionRunning, async (newIsSessionRunning) => {
 });
 
 const isAnimationDone = ref(false);
-
 </script>
 
 <style scoped lang="scss">
