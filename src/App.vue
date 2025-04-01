@@ -97,10 +97,6 @@ watch(isSessionRunning, async (newIsSessionRunning) => {
 });
 
 const isAnimationDone = ref(false);
-
-onMounted(() => {
-  console.log("testing update modal 1");
-});
 </script>
 
 <style scoped lang="scss">
