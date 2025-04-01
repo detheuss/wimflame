@@ -73,7 +73,6 @@ import Nexter from "@/components/ui/nexter/Nexter.vue";
 import RecoveryView from "@/views/RecoveryView.vue";
 import BreakView from "@/views/BreakView.vue";
 import { useWakeLock } from "@/composables/useWakeLock";
-import UpdateModal from "@/components/ui/updateModal/UpdateModal.vue";
 
 const { currentPhase, currentRound, isSessionRunning } = useBreathingSession();
 const { clearGuidanceAudioQuery } = useAudio();
