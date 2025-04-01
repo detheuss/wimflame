@@ -29,7 +29,7 @@ import { playUnconstrainedSound } from "@/composables/useAudio";
 const { currentPhase, settings } = useBreathingSession();
 
 const handleSessionStarted = () => {
-  playUnconstrainedSound("gong");
+  playUnconstrainedSound(settings.audio.soundId, settings.audio.volumes.sounds);
   currentPhase.value = settings.breathing.pauseBeforeFirstRound
     ? "preparation"
     : "breathing";

@@ -95,9 +95,13 @@ export const findAudio = (
 };
 
 /**Used for button sounds that I don't want to stop between phases */
-export const playUnconstrainedSound = (soundName: WimflameSoundEffectIdT) => {
+export const playUnconstrainedSound = (
+  soundName: WimflameSoundEffectIdT,
+  volume = 0.8,
+) => {
   const relativePath = `audio/sounds/${soundName}.mp3`;
   const audio = new Audio(relativePath);
+  audio.volume = volume;
   audio.play();
   return audio;
 };

@@ -50,7 +50,7 @@ const localValue = ref<number[]>([settings.audio.volumes[props.id] * 100]);
 watch(
   () => settings.audio.volumes[props.id],
   (newVal) => {
-    localValue.value = [newVal * 100];
+    localValue.value = [Math.ceil(newVal * 100)];
   },
 );
 

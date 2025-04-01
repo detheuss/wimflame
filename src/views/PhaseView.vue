@@ -42,7 +42,7 @@ const breathingSpeedSec = computed(() => {
 });
 
 onBeforeUnmount(() => {
-  playUnconstrainedSound("gong");
+  playUnconstrainedSound(settings.audio.soundId, settings.audio.volumes.sounds);
 });
 
 onBeforeMount(() => {
