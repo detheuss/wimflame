@@ -35,7 +35,6 @@ onMounted(() => {
 const isIOS = ref();
 
 function installPWA() {
-  console.log("clicked");
   const promptEvent = deferredPrompt.value as any;
   if (!promptEvent) return;
 
@@ -43,9 +42,9 @@ function installPWA() {
 
   promptEvent.userChoice.then((result: any) => {
     if (result.outcome === "accepted") {
-      console.log("✅ User accepted the install prompt");
+      console.debug("✅ User accepted the install prompt");
     } else {
-      console.log("❌ User dismissed the install prompt");
+      console.debug("❌ User dismissed the install prompt");
     }
 
     canInstall.value = false;

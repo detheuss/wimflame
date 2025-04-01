@@ -18,11 +18,11 @@
   />
   <Button
     size="lg"
-    variant="secondary"
+    variant="destructive"
     class="mt-3 w-full"
     @click="resetBreathingSettings"
   >
-    Restore defaults
+    Reset breathing settings
   </Button>
 </template>
 

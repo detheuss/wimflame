@@ -24,7 +24,14 @@
 <script setup lang="ts">
 import useBreathingSession from "@/composables/useBreathingSession";
 import { createConstrainedAudio, useAudio } from "@/composables/useAudio";
-import { computed, defineProps, onBeforeUnmount, onMounted, ref } from "vue";
+import {
+  computed,
+  defineProps,
+  onBeforeMount,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+} from "vue";
 
 const { playRandomBreatheIn, playRandomBreatheOut, playSpeech } = useAudio();
 // setting in breathing settings must be set to 35, because decimals are bugged
@@ -53,8 +60,16 @@ const props = defineProps({
 const { settings, currentPhase } = useBreathingSession();
 const { clearGuidanceAudioQuery, setGuidanceAudioQuery } = useAudio();
 
-const inhale = createConstrainedAudio("/audio/sounds/inhale.mp3", "inhale");
-const exhale = createConstrainedAudio("/audio/sounds/exhale.mp3", "exhale");
+const inhale = createConstrainedAudio(
+  "/audio/sounds/inhale.mp3",
+  "inhale",
+  settings.audio.volumes.breathing,
+);
+const exhale = createConstrainedAudio(
+  "/audio/sounds/exhale.mp3",
+  "exhale",
+  settings.audio.volumes.breathing,
+);
 
 const isBreathingLoopPlaying = ref();
 

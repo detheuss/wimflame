@@ -19,7 +19,6 @@ export const checkIsIOSPojebanySkurvenyRakByPozulTotuFirmu = (): boolean => {
 
 export const scrollToElementById = (id: string) => {
   const el = document.getElementById(id);
-  console.log(el);
   if (!el) return;
 
   el.scrollIntoView({ behavior: "smooth" });

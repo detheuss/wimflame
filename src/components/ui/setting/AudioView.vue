@@ -48,7 +48,7 @@ const currentAudio = computed(() =>
 
 const { playSound, playTrack } = useAudio();
 
-const { currentlyPlaying } = useAudio();
+const { currentlyPlayingSpeechAndSound } = useAudio();
 const { settings } = useBreathingSession();
 const props = defineProps<{
   audioId: WimflameMusicTrackIdT | WimflameSoundEffectIdT;
@@ -57,7 +57,9 @@ const props = defineProps<{
 }>();
 
 const isTrackPlaying = computed(() =>
-  [...currentlyPlaying.value].some((audioEl) => audioEl.id === props.audioId),
+  [...currentlyPlayingSpeechAndSound.value].some(
+    (audioEl) => audioEl.id === props.audioId,
+  ),
 );
 
 const playingAudio = ref();

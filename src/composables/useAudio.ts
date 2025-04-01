@@ -102,26 +102,57 @@ export const playUnconstrainedSound = (soundName: WimflameSoundEffectIdT) => {
   return audio;
 };
 
-export const createConstrainedAudio = (relativePath: string, id: string) => {
+export const createConstrainedAudio = (
+  relativePath: string,
+  id: string,
+  volume = 0.8,
+  isMusicTrack = false,
+) => {
   const audio = new Audio(relativePath);
   audio.id = id;
-  audio.onended = () => removeFromCurrentlyPlaying(audio);
-  currentlyPlaying.value.add(audio);
+  audio.volume = volume;
+
+  if (isMusicTrack) {
+    audio.onended = () => (currentlyPlayingMusicTrack.value = null);
+    currentlyPlayingMusicTrack.value = audio;
+  } else {
+    audio.onended = () => removeAudioFromCurrentlyPlaying(audio);
+    currentlyPlayingSpeechAndSound.value.add(audio);
+  }
+
   return audio;
 };
 
-const currentlyPlaying: Ref<Set<HTMLAudioElement>> = ref(new Set());
+const currentlyPlayingMusicTrack: Ref<HTMLAudioElement | null | undefined> =
+  ref();
 
-const removeFromCurrentlyPlaying = (audio: HTMLAudioElement) => {
-  currentlyPlaying.value.delete(audio);
+const currentlyPlayingSpeechAndSound: Ref<Set<HTMLAudioElement>> = ref(
+  new Set(),
+);
+
+const removeAudioFromCurrentlyPlaying = (audio: HTMLAudioElement) => {
+  currentlyPlayingSpeechAndSound.value.delete(audio);
 };
 
-export const stopAllConstrainedAudio = () => {
-  currentlyPlaying.value.forEach((audio) => {
+export const stopAllConstrainedSpeechAndSound = () => {
+  currentlyPlayingSpeechAndSound.value.forEach((audio) => {
     audio.pause();
     audio.currentTime = 0;
   });
-  currentlyPlaying.value.clear();
+  currentlyPlayingSpeechAndSound.value.clear();
+};
+
+export const stopConstrainedMusicTrack = () => {
+  debugger;
+  if (!currentlyPlayingMusicTrack.value) return;
+  currentlyPlayingMusicTrack.value.pause();
+  currentlyPlayingMusicTrack.value.currentTime = 0;
+  currentlyPlayingMusicTrack.value = null;
+};
+
+export const stopAllConstrainedAudio = () => {
+  stopAllConstrainedSpeechAndSound();
+  stopConstrainedMusicTrack();
 };
 
 export const useAudio = () => {
@@ -132,24 +163,26 @@ export const useAudio = () => {
   // plays sound and returns the sound object
   const playSound = (soundName: WimflameSoundEffectIdT) => {
     const relativePath = `audio/sounds/${soundName}.mp3`;
-    const audio = createConstrainedAudio(relativePath, soundName);
-    audio.volume = settings.audio.volumes.sounds / 100;
+    let volume = settings.audio.volumes.sounds;
+    const audio = createConstrainedAudio(relativePath, soundName, volume);
     audio.play();
     return audio;
   };
 
   const playTrack = (trackName: WimflameMusicTrackIdT) => {
     const relativePath = `audio/tracks/${trackName}.mp3`;
-    const audio = createConstrainedAudio(relativePath, trackName);
-    audio.volume = settings.audio.volumes.music / 100;
+    let volume = settings.audio.volumes.music;
+    const audio = createConstrainedAudio(relativePath, trackName, volume, true);
+    // const audio = new Audio(relativePath);
+    audio.loop = true;
     audio.play();
     return audio;
   };
 
   const playSpeech = (speechName: WimflameSpeechT) => {
     const relativePath = `audio/speech/${speechName}.mp3`;
-    const audio = createConstrainedAudio(relativePath, speechName);
-    audio.volume = settings.audio.volumes.speech / 100;
+    let volume = settings.audio.volumes.speech;
+    const audio = createConstrainedAudio(relativePath, speechName, volume);
     audio.play();
     return audio;
   };
@@ -181,7 +214,8 @@ export const useAudio = () => {
     guidanceAudioQuery,
     setGuidanceAudioQuery,
     clearGuidanceAudioQuery,
-    currentlyPlaying,
+    currentlyPlayingSpeechAndSound,
+    currentlyPlayingMusicTrack,
     playSound,
     playTrack,
     playSpeech,

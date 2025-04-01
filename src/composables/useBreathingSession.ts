@@ -30,12 +30,14 @@ export type MusicSettingsT = {
     music: number;
     speech: number;
     sounds: number;
+    breathing: number;
   };
   preferences: {
-    isMusicFromBreathing: boolean;
-    isMusicFromRetention: boolean;
+    isMusicDuringBreathing: boolean;
+    isMusicDuringRetention: boolean;
     isSoundPlayed: boolean;
     isGuidancePlayed: boolean;
+    isBreathingPlayed: boolean;
   };
 };
 
@@ -113,15 +115,17 @@ export const DEFAULT_MUSIC_SETTINGS: MusicSettingsT = {
   trackId: "into-the-void",
   soundId: "gong",
   volumes: {
-    music: 80,
-    speech: 80,
-    sounds: 80,
+    music: 0.8,
+    speech: 0.8,
+    sounds: 0.8,
+    breathing: 0.8,
   },
   preferences: {
-    isMusicFromBreathing: false,
-    isMusicFromRetention: true,
+    isMusicDuringBreathing: false,
+    isMusicDuringRetention: true,
     isSoundPlayed: true,
     isGuidancePlayed: true,
+    isBreathingPlayed: true,
   },
 };
 
@@ -148,6 +152,14 @@ const loadSettingsFromLS = () => {
       settings.audio = {
         ...DEFAULT_MUSIC_SETTINGS,
         ...parsedFromLS.audio,
+        volumes: {
+          ...DEFAULT_MUSIC_SETTINGS.volumes,
+          ...(parsedFromLS.audio.volumes ?? {}),
+        },
+        preferences: {
+          ...DEFAULT_MUSIC_SETTINGS.preferences,
+          ...(parsedFromLS.audio.preferences ?? {}),
+        },
       };
     }
   } catch (e) {
@@ -180,6 +192,25 @@ const useBreathingSession = () => {
       toast(getErrorToast(e) as any);
     }
   };
+
+  const resetAudioSettings = () => {
+    settings.audio = {
+      ...DEFAULT_MUSIC_SETTINGS,
+      volumes: { ...DEFAULT_MUSIC_SETTINGS.volumes },
+      preferences: { ...DEFAULT_MUSIC_SETTINGS.preferences },
+    };
+    try {
+      saveSettingsToLS();
+      toast({
+        title: "Audio settings have been reset!",
+        description: "Original audio settings are now saved.",
+        duration: 1250,
+      });
+    } catch (e: any) {
+      toast(getErrorToast(e) as any);
+    }
+  };
+
   onMounted(() => {
     loadSettingsFromLS();
   });
@@ -188,6 +219,7 @@ const useBreathingSession = () => {
     currentRound,
     settings,
     resetBreathingSettings,
+    resetAudioSettings,
     saveSettingsToLS,
     goToNextPhase,
   };

@@ -10,6 +10,7 @@
         @valueCommit="handleValueCommit"
         :min="0"
         :max="100"
+        @update:modelValue="stopAllConstrainedAudio"
       />
 
       <div
@@ -23,14 +24,18 @@
 
 <script setup lang="ts">
 import Slider from "@/components/ui/slider/Slider.vue";
-import { useAudio } from "@/composables/useAudio";
+import {
+  createConstrainedAudio,
+  stopAllConstrainedAudio,
+  useAudio,
+} from "@/composables/useAudio";
 import useBreathingSession, {
   type MusicSettingsT,
 } from "@/composables/useBreathingSession";
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 
 const { settings, saveSettingsToLS } = useBreathingSession();
-const { currentlyPlaying, playSpeech } = useAudio();
+const { currentlyPlayingSpeechAndSound, playSpeech, playSound } = useAudio();
 const props = defineProps<{
   id: keyof MusicSettingsT["volumes"];
   label?: string;
@@ -39,13 +44,13 @@ const props = defineProps<{
   step?: number;
 }>();
 
-const localValue = ref<number[]>([settings.audio.volumes[props.id]]);
+const localValue = ref<number[]>([settings.audio.volumes[props.id] * 100]);
 
 // Keep in sync with changes to global volume setting
 watch(
   () => settings.audio.volumes[props.id],
   (newVal) => {
-    localValue.value = [newVal];
+    localValue.value = [newVal * 100];
   },
 );
 
@@ -53,18 +58,32 @@ const displayValue = computed(() => localValue.value[0].toString());
 
 //@TODO this is ugly, but will work for now - BUT this relies on only one track playing! Else it gets buggy
 const setVolumeOfCurrentlyPlaying = () => {
-  currentlyPlaying.value.forEach((item) => {
+  currentlyPlayingSpeechAndSound.value.forEach((item) => {
     item.volume = localValue.value[0] / 100;
   });
 };
 
 const handleValueCommit = () => {
   if (!localValue.value?.length) return;
-  settings.audio.volumes[props.id] = localValue.value[0];
+
+  settings.audio.volumes[props.id] = localValue.value[0] / 100;
 
   setVolumeOfCurrentlyPlaying();
 
   if (props.id == "speech") playSpeech("no-pause");
+  if (props.id == "breathing") {
+    //@TODO again, ugly... logic in Breather. unify later
+    const exhale = createConstrainedAudio(
+      "/audio/sounds/exhale.mp3",
+      "exhale",
+      settings.audio.volumes.breathing,
+    );
+    exhale.play();
+  }
+
+  if (props.id == "sounds") {
+    playSound(settings.audio.soundId);
+  }
 
   saveSettingsToLS();
 };

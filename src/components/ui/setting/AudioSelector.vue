@@ -1,7 +1,7 @@
 <template>
   <Dialog @update:open="handleOpenAudioSelector">
     <DialogTrigger as-child>
-      <Button size="lg" class="w-full border-primary" variant="outline">{{
+      <Button size="lg" class="w-full text-foreground" variant="secondary">{{
         triggerLabel
       }}</Button>
     </DialogTrigger>

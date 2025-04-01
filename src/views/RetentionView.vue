@@ -6,7 +6,12 @@
 
 <script setup lang="ts">
 import Timer from "@/components/ui/timer/Timer.vue";
-import { stopAllConstrainedAudio, useAudio } from "@/composables/useAudio";
+import {
+  stopAllConstrainedAudio,
+  stopAllConstrainedSpeechAndSound,
+  stopConstrainedMusicTrack,
+  useAudio,
+} from "@/composables/useAudio";
 import useBreathingSession from "@/composables/useBreathingSession";
 import PhaseView from "@/views/PhaseView.vue";
 import { onBeforeMount, onBeforeUnmount, onMounted } from "vue";
@@ -67,14 +72,37 @@ const playRetentionGuidance = () => {
   }, 65000);
 };
 
+const handlePlayMusicTrack = () => {
+  const { isMusicDuringBreathing, isMusicDuringRetention } =
+    settings.audio.preferences;
+
+  if (isMusicDuringBreathing && isMusicDuringRetention) {
+    // Already handled by BreathingView
+    return;
+  }
+
+  if (isMusicDuringBreathing && !isMusicDuringRetention) {
+    stopConstrainedMusicTrack();
+  }
+
+  if (!isMusicDuringBreathing && isMusicDuringRetention) {
+    playTrack(settings.audio.trackId);
+  }
+
+  if (!isMusicDuringBreathing && !isMusicDuringRetention) {
+    stopConstrainedMusicTrack();
+  }
+};
+
 onMounted(() => {
   playRetentionGuidance();
-  playTrack(settings.audio.trackId);
+  handlePlayMusicTrack();
 });
 
 onBeforeMount(() => {
   clearGuidanceAudioQuery();
-  stopAllConstrainedAudio();
+  // so music can continue if user selected
+  stopAllConstrainedSpeechAndSound();
 });
 
 onBeforeUnmount(() => {

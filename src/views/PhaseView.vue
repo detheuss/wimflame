@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import {
   playUnconstrainedSound,
-  stopAllConstrainedAudio,
+  stopAllConstrainedSpeechAndSound,
   useAudio,
 } from "@/composables/useAudio";
 import useBreathingSession from "@/composables/useBreathingSession";
@@ -47,12 +47,12 @@ onBeforeUnmount(() => {
 
 onBeforeMount(() => {
   clearGuidanceAudioQuery();
-  stopAllConstrainedAudio();
+  stopAllConstrainedSpeechAndSound();
 });
 
 onBeforeUnmount(() => {
   clearGuidanceAudioQuery();
-  stopAllConstrainedAudio();
+  stopAllConstrainedSpeechAndSound();
 });
 </script>
 

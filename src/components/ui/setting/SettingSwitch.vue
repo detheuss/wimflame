@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center gap-2 border p-3 rounded-lg" :class="{'border-primary': model}">
+  <div class="flex items-center gap-4 border p-3 rounded-lg" :class="{'border-primary': model}">
     <Switch :id="id" :model-value="model" @update:model-value="handleToggle" />
     <Label :for="id">{{ label }}</Label>
   </div>

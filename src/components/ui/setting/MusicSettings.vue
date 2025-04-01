@@ -1,48 +1,55 @@
 <template>
-  <div class="flex flex-col gap-4">
-    <div class="flex flex-col gap-3">
-      <Separator label="Music" class="mb-6 mt-4" />
+  <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-6">
+      <Separator label="MUSIC" class="mb-2 mt-6" />
+      <SettingVolume label="Music volume" id="music" />
+
       <AudioView is-music-track :audioId="settings.audio.trackId" />
-      <SettingVolume id="music" />
       <AudioSelector
         is-music-track-selector
         class="pointer-events-auto"
-        trigger-label="Change Music Track"
+        trigger-label="Change music track"
       />
+
       <SettingSwitch
-        id="isMusicFromBreathing"
+        id="isMusicDuringBreathing"
         label="Music during breathing"
-        v-model="settings.audio.preferences.isMusicFromBreathing"
+        v-model="settings.audio.preferences.isMusicDuringBreathing"
       />
       <SettingSwitch
-        id="isMusicFromRetention"
+        id="isMusicDuringRetention"
         label="Music during retention"
-        v-model="settings.audio.preferences.isMusicFromRetention"
+        v-model="settings.audio.preferences.isMusicDuringRetention"
       />
     </div>
-    <div class="flex flex-col gap-3">
-      <Separator label="Sound effects" class="mb-6 mt-4" />
+    <div class="flex flex-col gap-6">
+      <Separator label="BREATHING AND SOUNDS" class="mb-2 mt-6" />
+      <SettingVolume label="Breathing volume" id="breathing" />
+      <SettingVolume label="Sound effect volume" id="sounds" />
       <AudioView :audio-id="settings.audio.soundId" />
-      <SettingVolume id="sounds" />
       <AudioSelector
         class="pointer-events-auto"
-        trigger-label="Change Sound Effect"
+        trigger-label="Change sound effect"
       />
+
       <SettingSwitch
         id="isSoundPlayed"
         label="Play sound effect"
         v-model="settings.audio.preferences.isSoundPlayed"
       />
     </div>
-    <div class="flex flex-col gap-3">
-      <Separator label="Speech guidance" class="mb-6 mt-4" />
+    <div class="flex flex-col gap-6">
+      <Separator label="SPOKEN GUIDANCE" class="mb-2 mt-6" />
+      <SettingVolume label="Guidance volume" id="speech" />
       <SettingSwitch
         id="isGuidancePlayed"
         label="Play guidance"
         v-model="settings.audio.preferences.isGuidancePlayed"
       />
-      <SettingVolume id="speech" />
     </div>
+    <Button size="lg" variant="destructive" @click="resetAudioSettings">
+      Reset audio settings
+    </Button>
   </div>
 </template>
 
@@ -53,8 +60,9 @@ import AudioSelector from "@/components/ui/setting/AudioSelector.vue";
 import SettingVolume from "@/components/ui/setting/SettingVolume.vue";
 import useBreathingSession from "@/composables/useBreathingSession";
 import SettingSwitch from "@/components/ui/setting/SettingSwitch.vue";
+import Button from "@/components/ui/button/Button.vue";
 
-const { settings } = useBreathingSession();
+const { settings, resetAudioSettings } = useBreathingSession();
 </script>
 
 <style scoped></style>
