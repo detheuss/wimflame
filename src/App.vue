@@ -98,9 +98,6 @@ watch(isSessionRunning, async (newIsSessionRunning) => {
 
 const isAnimationDone = ref(false);
 
-onMounted(() => {
-  console.log("outofideas");
-});
 </script>
 
 <style scoped lang="scss">
