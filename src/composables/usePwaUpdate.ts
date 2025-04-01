@@ -1,9 +1,9 @@
 import { ref } from "vue";
 import { registerSW } from "virtual:pwa-register";
 
-export const usePwaUpdate = () => {
-  const showUpdateModal = ref(false);
+const showUpdateModal = ref(false);
 
+export const usePwaUpdate = () => {
   const updateSW = registerSW({
     onNeedRefresh() {
       showUpdateModal.value = true;
