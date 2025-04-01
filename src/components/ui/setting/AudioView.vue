@@ -22,7 +22,7 @@
       v-if="!isPlayButtonHidden"
       @click.stop="handleToggleTrack"
     >
-      <PlayIcon v-if="!isTrackPlaying" />
+      <PlayIcon v-if="!isAudioPlaying" />
       <StopIcon v-else />
     </Button>
   </div>
@@ -48,7 +48,8 @@ const currentAudio = computed(() =>
 
 const { playSound, playTrack } = useAudio();
 
-const { currentlyPlayingSpeechAndSound } = useAudio();
+const { currentlyPlayingSpeechAndSound, currentlyPlayingMusicTrack } =
+  useAudio();
 const { settings } = useBreathingSession();
 const props = defineProps<{
   audioId: WimflameMusicTrackIdT | WimflameSoundEffectIdT;
@@ -56,16 +57,19 @@ const props = defineProps<{
   isMusicTrack?: boolean;
 }>();
 
-const isTrackPlaying = computed(() =>
-  [...currentlyPlayingSpeechAndSound.value].some(
-    (audioEl) => audioEl.id === props.audioId,
-  ),
-);
+const isAudioPlaying = computed(() => {
+  if (props.isMusicTrack) {
+    return currentlyPlayingMusicTrack.value?.id == props.audioId;
+  } else
+    return [...currentlyPlayingSpeechAndSound.value].some(
+      (audioEl) => audioEl.id === props.audioId,
+    );
+});
 
 const playingAudio = ref();
 
 const handleToggleTrack = () => {
-  if (!isTrackPlaying.value) {
+  if (!isAudioPlaying.value) {
     stopAllConstrainedAudio();
 
     playingAudio.value = props.isMusicTrack
@@ -74,7 +78,7 @@ const handleToggleTrack = () => {
     return;
   }
 
-  if (playingAudio.value && isTrackPlaying.value) {
+  if (playingAudio.value && isAudioPlaying.value) {
     stopAllConstrainedAudio();
 
     playingAudio.value.pause();
