@@ -4,7 +4,7 @@ import autoprefixer from "autoprefixer";
 import tailwind from "tailwindcss";
 import path from "path";
 import { VitePWA } from "vite-plugin-pwa";
-import svgLoader from 'vite-svg-loader'
+import svgLoader from "vite-svg-loader";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -18,7 +18,7 @@ export default defineConfig({
     vue(),
     svgLoader(),
     VitePWA({
-      registerType: "autoUpdate",
+      registerType: "prompt",
       devOptions: {
         enabled: true,
       },
