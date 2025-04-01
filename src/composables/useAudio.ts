@@ -94,9 +94,9 @@ export const findAudio = (
   return searchingIn.find((item) => item.id == id);
 };
 
-/**Used for button sounds that I don't want to stop between phases 
+/**Used for button sounds that I don't want to stop between phases
  * Should not be exposed!
-*/
+ */
 const playUnconstrainedSound = (
   soundName: WimflameSoundEffectIdT,
   volume = 0.8,
@@ -149,7 +149,6 @@ export const stopAllConstrainedSpeechAndSound = () => {
 };
 
 export const stopConstrainedMusicTrack = () => {
-  debugger;
   if (!currentlyPlayingMusicTrack.value) return;
   currentlyPlayingMusicTrack.value.pause();
   currentlyPlayingMusicTrack.value.currentTime = 0;

@@ -25,7 +25,7 @@ import {
   useAudio,
 } from "@/composables/useAudio";
 import useBreathingSession from "@/composables/useBreathingSession";
-import { computed, onBeforeMount, onBeforeUnmount } from "vue";
+import { computed, onBeforeMount, onBeforeUnmount, onMounted } from "vue";
 
 defineProps<{
   message: string;
@@ -40,16 +40,18 @@ const breathingSpeedSec = computed(() => {
     : 0;
 });
 
-onBeforeUnmount(() => {
-  playSound(settings.audio.soundId, true);
-});
-
 onBeforeMount(() => {
   clearGuidanceAudioQuery();
   stopAllConstrainedSpeechAndSound();
+  console.log("beforeMount!");
+});
+onMounted(() => {
+  console.log("mounted!");
 });
 
 onBeforeUnmount(() => {
+  console.log("before UNmount!")
+  playSound(settings.audio.soundId, true);
   clearGuidanceAudioQuery();
   stopAllConstrainedSpeechAndSound();
 });
