@@ -1,5 +1,6 @@
 <template>
   <Toaster />
+  <UpdateModal />
 
   <div
     class="relative mx-auto flex max-h-screen min-h-[100dvh] w-full max-w-md flex-col overflow-hidden p-5 lg:border"
@@ -11,7 +12,6 @@
     </Transition>
 
     <!-- APP -->
-
     <div class="relative flex min-h-[300px] flex-1 items-center justify-center">
       <Transition
         name="fade-zoom"
@@ -74,6 +74,7 @@ import Nexter from "@/components/ui/nexter/Nexter.vue";
 import RecoveryView from "@/views/RecoveryView.vue";
 import BreakView from "@/views/BreakView.vue";
 import { useWakeLock } from "@/composables/useWakeLock";
+import UpdateModal from "@/components/ui/updateModal/UpdateModal.vue";
 
 const { currentPhase, currentRound, isSessionRunning } = useBreathingSession();
 const { clearGuidanceAudioQuery } = useAudio();

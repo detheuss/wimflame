@@ -13,7 +13,7 @@
         class="absolute top-12 text-sm text-secondary-foreground"
         :style="{ animationDuration: breathingSpeedSec + 's' }"
       >
-        Tap anywhere to skip to next phase.
+        Double tap to skip to next phase.
       </p>
     </div>
   </div>
