@@ -1,5 +1,5 @@
 <template>
-  <AlertDialog :open="showUpdateModal">
+  <AlertDialog ref="updateModal" :open="showUpdateModal">
     <AlertDialogContent>
       <AlertDialogHeader>
         <AlertDialogTitle>New Features Are Ready! 🎉</AlertDialogTitle>
