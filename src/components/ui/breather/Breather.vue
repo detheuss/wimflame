@@ -24,14 +24,7 @@
 <script setup lang="ts">
 import useBreathingSession from "@/composables/useBreathingSession";
 import { createConstrainedAudio, useAudio } from "@/composables/useAudio";
-import {
-  computed,
-  defineProps,
-  onBeforeMount,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-} from "vue";
+import { computed, defineProps, onBeforeUnmount, onMounted, ref } from "vue";
 
 const { playRandomBreatheIn, playRandomBreatheOut, playSpeech } = useAudio();
 // setting in breathing settings must be set to 35, because decimals are bugged

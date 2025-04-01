@@ -16,12 +16,7 @@ import PhaseView from "@/views/PhaseView.vue";
 import { onBeforeMount, onBeforeUnmount, onMounted } from "vue";
 
 const { currentRound, settings } = useBreathingSession();
-const {
-  clearGuidanceAudioQuery,
-  playTrack,
-  currentlyPlayingMusicTrack,
-  currentlyPlayingSpeechAndSound,
-} = useAudio();
+const { clearGuidanceAudioQuery, playTrack } = useAudio();
 
 onMounted(() => {
   currentRound.value++;

@@ -32,7 +32,7 @@ import {
 import useBreathingSession, {
   type MusicSettingsT,
 } from "@/composables/useBreathingSession";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 
 const { settings, saveSettingsToLS } = useBreathingSession();
 const { currentlyPlayingSpeechAndSound, playSpeech, playSound } = useAudio();
