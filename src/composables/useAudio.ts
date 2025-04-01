@@ -94,8 +94,10 @@ export const findAudio = (
   return searchingIn.find((item) => item.id == id);
 };
 
-/**Used for button sounds that I don't want to stop between phases */
-export const playUnconstrainedSound = (
+/**Used for button sounds that I don't want to stop between phases 
+ * Should not be exposed!
+*/
+const playUnconstrainedSound = (
   soundName: WimflameSoundEffectIdT,
   volume = 0.8,
 ) => {
@@ -165,9 +167,19 @@ export const useAudio = () => {
   const { settings } = useBreathingSession();
 
   // plays sound and returns the sound object
-  const playSound = (soundName: WimflameSoundEffectIdT) => {
-    const relativePath = `audio/sounds/${soundName}.mp3`;
+  const playSound = (
+    soundName: WimflameSoundEffectIdT,
+    isUnconstrained = false,
+  ) => {
+    if (!settings.audio.preferences.isSoundPlayed) return;
+
     let volume = settings.audio.volumes.sounds;
+
+    if (isUnconstrained) {
+      return playUnconstrainedSound(soundName, volume);
+    }
+
+    const relativePath = `audio/sounds/${soundName}.mp3`;
     const audio = createConstrainedAudio(relativePath, soundName, volume);
     audio.play();
     return audio;
@@ -177,13 +189,14 @@ export const useAudio = () => {
     const relativePath = `audio/tracks/${trackName}.mp3`;
     let volume = settings.audio.volumes.music;
     const audio = createConstrainedAudio(relativePath, trackName, volume, true);
-    // const audio = new Audio(relativePath);
     audio.loop = true;
     audio.play();
     return audio;
   };
 
   const playSpeech = (speechName: WimflameSpeechT) => {
+    if (!settings.audio.preferences.isGuidancePlayed) return;
+
     const relativePath = `audio/speech/${speechName}.mp3`;
     let volume = settings.audio.volumes.speech;
     const audio = createConstrainedAudio(relativePath, speechName, volume);

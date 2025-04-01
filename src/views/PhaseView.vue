@@ -21,7 +21,6 @@
 
 <script setup lang="ts">
 import {
-  playUnconstrainedSound,
   stopAllConstrainedSpeechAndSound,
   useAudio,
 } from "@/composables/useAudio";
@@ -33,7 +32,7 @@ defineProps<{
 }>();
 
 const { settings } = useBreathingSession();
-const { clearGuidanceAudioQuery } = useAudio();
+const { clearGuidanceAudioQuery, playSound } = useAudio();
 
 const breathingSpeedSec = computed(() => {
   return settings.breathing?.breathingSpeed
@@ -42,7 +41,7 @@ const breathingSpeedSec = computed(() => {
 });
 
 onBeforeUnmount(() => {
-  playUnconstrainedSound(settings.audio.soundId, settings.audio.volumes.sounds);
+  playSound(settings.audio.soundId, true);
 });
 
 onBeforeMount(() => {
