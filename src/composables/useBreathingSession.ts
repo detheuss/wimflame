@@ -3,9 +3,16 @@ import type {
   WimflameSoundEffectIdT,
   WimflameMusicTrackIdT,
 } from "@/composables/useAudio";
-import { onMounted, reactive, ref, type Reactive, type Ref } from "vue";
+import {
+  computed,
+  onMounted,
+  reactive,
+  ref,
+  type Reactive,
+  type Ref,
+} from "vue";
 
-const getErrorToast = (e: any) => {
+export const getErrorToast = (e: any) => {
   return {
     title: "Error: Niečo sa pojebalo",
     description: `Help me out by submitting a screenshot of this message with your device model name to detheuss@gmail.com. ${e}`,
@@ -57,6 +64,10 @@ export type BreathingSessionPhaseT =
   | "break";
 
 const currentPhase: Ref<BreathingSessionPhaseT> = ref("before");
+
+const isSessionRunning: Ref<boolean> = computed(
+  () => currentPhase.value !== "before",
+);
 
 const currentRound: Ref<number> = ref(0);
 
@@ -222,6 +233,7 @@ const useBreathingSession = () => {
     resetAudioSettings,
     saveSettingsToLS,
     goToNextPhase,
+    isSessionRunning,
   };
 };
 

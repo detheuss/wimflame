@@ -63,7 +63,7 @@ import QuickActions from "@/views/QuickActions.vue";
 import useBreathingSession from "@/composables/useBreathingSession";
 import StartButton from "@/views/StartButton.vue";
 import PreparationView from "@/views/PreparationView.vue";
-import { ref } from "vue";
+import { ref, watch, onWatcherCleanup } from "vue";
 import BreathingView from "@/views/BreathingView.vue";
 import NavbarPlaceholder from "@/components/ui/navbar/NavbarPlaceholder.vue";
 import Toaster from "@/components/ui/toast/Toaster.vue";
@@ -73,8 +73,9 @@ import { stopAllConstrainedAudio, useAudio } from "@/composables/useAudio";
 import Nexter from "@/components/ui/nexter/Nexter.vue";
 import RecoveryView from "@/views/RecoveryView.vue";
 import BreakView from "@/views/BreakView.vue";
+import { useWakeLock } from "@/composables/useWakeLock";
 
-const { currentPhase, currentRound } = useBreathingSession();
+const { currentPhase, currentRound, isSessionRunning } = useBreathingSession();
 const { clearGuidanceAudioQuery } = useAudio();
 
 const handleCancelSession = () => {
@@ -83,6 +84,16 @@ const handleCancelSession = () => {
   currentPhase.value = "before";
   currentRound.value = 0;
 };
+
+const { requestWakeLock, releaseWakeLock } = useWakeLock();
+
+// SCREEN WAKE LOCK API
+watch(isSessionRunning, async (newIsSessionRunning) => {
+  if (newIsSessionRunning) {
+    requestWakeLock();
+    onWatcherCleanup(() => releaseWakeLock());
+  } else releaseWakeLock();
+});
 
 const isAnimationDone = ref(false);
 </script>
