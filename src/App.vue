@@ -63,7 +63,7 @@ import QuickActions from "@/views/QuickActions.vue";
 import useBreathingSession from "@/composables/useBreathingSession";
 import StartButton from "@/views/StartButton.vue";
 import PreparationView from "@/views/PreparationView.vue";
-import { ref, watch, onWatcherCleanup } from "vue";
+import { ref, watch, onWatcherCleanup, onMounted } from "vue";
 import BreathingView from "@/views/BreathingView.vue";
 import NavbarPlaceholder from "@/components/ui/navbar/NavbarPlaceholder.vue";
 import Toaster from "@/components/ui/toast/Toaster.vue";
@@ -97,6 +97,10 @@ watch(isSessionRunning, async (newIsSessionRunning) => {
 });
 
 const isAnimationDone = ref(false);
+
+onMounted(() => {
+  console.log("outofideas");
+});
 </script>
 
 <style scoped lang="scss">
