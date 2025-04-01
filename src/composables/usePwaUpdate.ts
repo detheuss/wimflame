@@ -3,16 +3,16 @@ import { registerSW } from "virtual:pwa-register";
 
 const showUpdateModal = ref(false);
 
-export const usePwaUpdate = () => {
-  const updateSW = registerSW({
-    onNeedRefresh() {
-      showUpdateModal.value = true;
-    },
-    onOfflineReady() {
-      console.log("[PWA] Ready to work offline");
-    },
-  });
+const updateSW = registerSW({
+  onNeedRefresh() {
+    showUpdateModal.value = true;
+  },
+  onOfflineReady() {
+    console.log("[WIMFLAME] Ready to work offline");
+  },
+});
 
+export const usePwaUpdate = () => {
   const applyUpdate = () => {
     updateSW(true);
   };
