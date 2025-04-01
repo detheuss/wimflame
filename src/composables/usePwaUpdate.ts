@@ -1,8 +1,8 @@
-import { showUpdateModal, applyUpdate } from "@/pwa";
+// import { showUpdateModal, applyUpdate } from "@/pwa";
 
-export const usePwaUpdate = () => {
-  return {
-    showUpdateModal,
-    applyUpdate,
-  };
-};
+// export const usePwaUpdate = () => {
+//   return {
+//     showUpdateModal,
+//     applyUpdate,
+//   };
+// };

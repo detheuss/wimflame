@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <AlertDialog ref="updateModal" :open="showUpdateModal">
     <AlertDialogContent>
       <AlertDialogHeader>
@@ -27,4 +27,4 @@ import {
 import { usePwaUpdate } from "@/composables/usePwaUpdate";
 
 const { showUpdateModal, applyUpdate } = usePwaUpdate();
-</script>
+</script> -->
