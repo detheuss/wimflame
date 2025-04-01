@@ -18,7 +18,7 @@ export default defineConfig({
     vue(),
     svgLoader(),
     VitePWA({
-      registerType: "prompt",
+      registerType: "autoUpdate",
       devOptions: {
         enabled: true,
       },
