@@ -1,7 +1,6 @@
 <template>
-  <div
+  <button
     class="relative flex aspect-square h-full w-full max-w-[300px] items-center justify-center"
-    :role="!hasSessionStarted ? 'button' : undefined"
     @click="handleSessionStarted"
   >
     <img
@@ -19,7 +18,7 @@
     <div class="absolute">
       <p class="text-xl" v-if="!hasSessionStarted">{{ startCta }}</p>
     </div>
-  </div>
+  </button>
 </template>
 
 <script setup lang="ts">
@@ -27,9 +26,11 @@ import useBreathingSession from "@/composables/useBreathingSession";
 import { useAudio } from "@/composables/useAudio";
 
 const { currentPhase, settings } = useBreathingSession();
+const { initiateAudioContext } = useAudio();
 const { playSound } = useAudio();
 
 const handleSessionStarted = () => {
+  initiateAudioContext();
   playSound(settings.audio.soundId, true);
 
   currentPhase.value = settings.breathing.pauseBeforeFirstRound

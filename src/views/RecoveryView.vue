@@ -18,14 +18,14 @@ import { onBeforeMount, onBeforeUnmount, onMounted } from "vue";
 
 const { settings, goToNextPhase } = useBreathingSession();
 const { clearGuidanceAudioQuery } = useAudio();
-const { playRandomBreatheOut, playSpeech } = useAudio();
+const { playRandomBreatheOutSpeech, playSpeech } = useAudio();
 const playRecoveryGuidance = () => {
   clearGuidanceAudioQuery();
   playSpeech("recovery-in");
 };
 
 const handleRecoveryEnded = () => {
-  playRandomBreatheOut();
+  playRandomBreatheOutSpeech();
 
   // this is the fuss I mentioned in the useBreathSession composable
   setTimeout(() => {

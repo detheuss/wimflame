@@ -16,10 +16,21 @@ import PhaseView from "@/views/PhaseView.vue";
 import { onBeforeMount, onBeforeUnmount, onMounted } from "vue";
 
 const { currentRound, settings } = useBreathingSession();
-const { clearGuidanceAudioQuery, playTrack } = useAudio();
+const {
+  clearGuidanceAudioQuery,
+  playTrack,
+  stopAndClearAllActiveAudioBuffers,
+  playBreathingLoop,
+  isBreathingLoopPlaying,
+  clearBreathingAudioQuery,
+} = useAudio();
 
-onMounted(() => {
+onMounted(async () => {
   currentRound.value++;
+
+  if (settings.audio.preferences.isBreathingPlayed) {
+    await playBreathingLoop();
+  }
 
   if (settings.audio.preferences.isMusicDuringBreathing) {
     playTrack(settings.audio.trackId);
@@ -32,9 +43,11 @@ onBeforeMount(() => {
 });
 
 onBeforeUnmount(() => {
+  isBreathingLoopPlaying.value = false;
   clearGuidanceAudioQuery();
-  // so music can continue to retention if user selected
+  clearBreathingAudioQuery();
   stopAllConstrainedSpeechAndSound();
+  stopAndClearAllActiveAudioBuffers();
 });
 </script>
 

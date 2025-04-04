@@ -1,5 +1,5 @@
 import useBreathingSession from "@/composables/useBreathingSession";
-import { ref, type Ref } from "vue";
+import { computed, ref, watch, type Ref } from "vue";
 
 export type WimflameSoundEffectIdT =
   | "gong"
@@ -160,12 +160,27 @@ export const stopAllConstrainedAudio = () => {
   stopConstrainedMusicTrack();
 };
 
+const audioContext: Ref<AudioContext | null | undefined> = ref();
+audioContext.value?.onstatechange;
+
+const loadAudioBuffer = async (url: string) => {
+  const response = await fetch(url);
+  const arrayBuffer = await response.arrayBuffer();
+  return await audioContext.value?.decodeAudioData(arrayBuffer);
+};
+
+const isBreathingLoopPlaying = ref(false);
+
+// controls volume
+const breathGainNode = ref();
+const inhaleBuffer: Ref<AudioBuffer | undefined> = ref();
+const exhaleBuffer: Ref<AudioBuffer | undefined> = ref();
+
 export const useAudio = () => {
   const guidanceAudioQuery = ref<Set<ReturnType<typeof setTimeout>>>(new Set());
 
   const { settings } = useBreathingSession();
 
-  // plays sound and returns the sound object
   const playSound = (
     soundName: WimflameSoundEffectIdT,
     isUnconstrained = false,
@@ -203,12 +218,12 @@ export const useAudio = () => {
     return audio;
   };
 
-  const playRandomBreatheIn = () => {
+  const playRandomBreatheInSpeech = () => {
     const options: WimflameSpeechT[] = ["breathe-in", "breathe-in-2"];
     playSpeech(options[Math.floor(Math.random() * options.length)]);
   };
 
-  const playRandomBreatheOut = () => {
+  const playRandomBreatheOutSpeech = () => {
     const options: WimflameSpeechT[] = ["breathe-out", "breathe-out-2"];
     playSpeech(options[Math.floor(Math.random() * options.length)]);
   };
@@ -226,6 +241,136 @@ export const useAudio = () => {
     guidanceAudioQuery.value.clear();
   };
 
+  const breathingAudioQuery = ref<Set<ReturnType<typeof setTimeout>>>(
+    new Set(),
+  );
+
+  const setBreathingAudioQuery = (fn: () => void, delay: number) => {
+    const id = setTimeout(() => {
+      breathingAudioQuery.value.delete(id); // Clean up after execution
+      fn();
+    }, delay);
+    breathingAudioQuery.value.add(id);
+  };
+
+  const clearBreathingAudioQuery = () => {
+    breathingAudioQuery.value.forEach(clearTimeout);
+    breathingAudioQuery.value.clear();
+  };
+
+  // BREATHING LOOP MAGIC
+  const activeAudioBufferSources = ref<Set<AudioBufferSourceNode>>(new Set());
+
+  const stopAndClearAllActiveAudioBuffers = () => {
+    activeAudioBufferSources.value.forEach((source) => {
+      try {
+        source.stop();
+      } catch (_) {
+        console.error(_);
+      }
+    });
+    activeAudioBufferSources.value.clear();
+  };
+
+  const initiateAudioContext = async () => {
+    audioContext.value = new (window.AudioContext ||
+      (window as any)?.webkitAudioContext)();
+
+    // create & adjust gain (volume)
+    breathGainNode.value = audioContext.value.createGain();
+    breathGainNode.value.gain.value = settings.audio.volumes.breathing || 0.8;
+
+    inhaleBuffer.value = await loadAudioBuffer("/audio/sounds/inhale.mp3");
+    exhaleBuffer.value = await loadAudioBuffer("/audio/sounds/exhale.mp3");
+  };
+
+  // update breathing volume when settings chage
+  watch(
+    () => settings.audio.volumes.breathing,
+    (newVal) => {
+      if (!breathGainNode) return;
+      breathGainNode.value.gain.value = newVal ?? 0.8;
+    },
+  );
+
+  // const playBreatheIn = (delay?: number) => {
+  //   const inhaleSource = createConstrainedBufferSource(
+  //     inhaleBuffer,
+  //     breathGainNode,
+  //   );
+
+  //   inhaleSource.start(delay ?? 0);
+  // };
+
+  // const playBreatheOut = (delay?: number) => {
+  //   const exhaleSource = createConstrainedBufferSource(
+  //     exhaleBuffer,
+  //     breathGainNode,
+  //   );
+
+  //   exhaleSource.start(delay ?? 0);
+  // };
+
+  const createConstrainedBufferSource = (
+    buffer: AudioBuffer,
+    gain?: GainNode,
+    onended?: () => any,
+  ) => {
+    if (!audioContext.value) {
+      throw new Error("Missing Audio Context");
+    }
+
+    const source = audioContext.value.createBufferSource();
+    source.buffer = buffer;
+
+    // gain is like "resistor" middleware to change volume
+    if (gain) {
+      gain.connect(audioContext.value.destination);
+      source.connect(gain);
+    } else {
+      // if no gain - connect directly
+      source.connect(audioContext.value.destination);
+    }
+
+    activeAudioBufferSources.value.add(source);
+    source.onended = () => {
+      // always remove
+      activeAudioBufferSources.value.delete(source);
+      // custom actions
+      onended?.();
+    };
+
+    return source;
+  };
+
+  const playBreathingLoop = async () => {
+    if (!audioContext.value || !inhaleBuffer.value || !exhaleBuffer.value)
+      return;
+
+    if (!isBreathingLoopPlaying.value) {
+      clearBreathingAudioQuery();
+      stopAndClearAllActiveAudioBuffers();
+      return;
+    }
+    const inhaleSource = createConstrainedBufferSource(
+      inhaleBuffer.value,
+      breathGainNode.value,
+    );
+
+    const exhaleSource = createConstrainedBufferSource(
+      exhaleBuffer.value,
+      breathGainNode.value,
+    );
+
+    const breathingSpeedMs = settings.breathing.breathingSpeed * 100;
+    const exhaleDelayMs = breathingSpeedMs / 2;
+
+    inhaleSource.start();
+    setBreathingAudioQuery(() => exhaleSource.start(), exhaleDelayMs);
+
+    setBreathingAudioQuery(() => playBreathingLoop(), breathingSpeedMs);
+  };
+
   return {
     guidanceAudioQuery,
     setGuidanceAudioQuery,
@@ -235,7 +380,16 @@ export const useAudio = () => {
     playSound,
     playTrack,
     playSpeech,
-    playRandomBreatheIn,
-    playRandomBreatheOut,
+    playRandomBreatheInSpeech,
+    playRandomBreatheOutSpeech,
+    audioContext,
+    loadAudioBuffer,
+    inhaleBuffer,
+    exhaleBuffer,
+    isBreathingLoopPlaying,
+    playBreathingLoop,
+    stopAndClearAllActiveAudioBuffers,
+    initiateAudioContext,
+    clearBreathingAudioQuery,
   };
 };

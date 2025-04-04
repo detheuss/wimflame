@@ -75,11 +75,18 @@ import BreakView from "@/views/BreakView.vue";
 import { useWakeLock } from "@/composables/useWakeLock";
 
 const { currentPhase, currentRound, isSessionRunning } = useBreathingSession();
-const { clearGuidanceAudioQuery } = useAudio();
+const {
+  clearGuidanceAudioQuery,
+  clearBreathingAudioQuery,
+  stopAndClearAllActiveAudioBuffers,
+  
+} = useAudio();
 
 const handleCancelSession = () => {
   clearGuidanceAudioQuery();
+  clearBreathingAudioQuery();
   stopAllConstrainedAudio();
+  stopAndClearAllActiveAudioBuffers();
   currentPhase.value = "before";
   currentRound.value = 0;
 };
