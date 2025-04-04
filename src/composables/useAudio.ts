@@ -1,5 +1,5 @@
 import useBreathingSession from "@/composables/useBreathingSession";
-import { computed, ref, watch, type Ref } from "vue";
+import { ref, watch, type Ref } from "vue";
 
 export type WimflameSoundEffectIdT =
   | "gong"
