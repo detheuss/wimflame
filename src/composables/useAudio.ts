@@ -276,6 +276,16 @@ export const useAudio = () => {
     audioContext.value = new (window.AudioContext ||
       (window as any)?.webkitAudioContext)();
 
+    audioContext.value.onstatechange = async () => {
+      if (audioContext.value?.state === "suspended") {
+        try {
+          await audioContext.value.resume();
+        } catch (err) {
+          console.warn("Failed to resume context", err);
+        }
+      }
+    };
+
     // create & adjust gain (volume)
     breathGainNode.value = audioContext.value.createGain();
     breathGainNode.value.gain.value = settings.audio.volumes.breathing || 0.8;
