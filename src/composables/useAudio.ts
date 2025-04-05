@@ -199,27 +199,28 @@ export const useAudio = () => {
     return audio;
   };
 
-  const playTrack = async (trackName: WimflameMusicTrackIdT) => {
+  const playTrack = (trackName: WimflameMusicTrackIdT) => {
     const relativePath = `audio/tracks/${trackName}.mp3`;
-    // let volume = settings.audio.volumes.music;
-    // const audio = createConstrainedAudio(relativePath, trackName, volume, true);
-    // audio.loop = true;
-    // audio.play();
-    // return audio;
-    await loadAudioBuffer(relativePath).then((res) => {
-      if (!res) {
-        console.error(
-          "MANUAL ERROR LOG: TRACK BUFFER NOT LOADED FOR",
-          relativePath,
-        );
-        return;
-      }
+    let volume = settings.audio.volumes.music;
+    const audio = createConstrainedAudio(relativePath, trackName, volume, true);
+    audio.loop = true;
+    audio.play();
+    return audio;
+    /**via context */
+    // await loadAudioBuffer(relativePath).then((res) => {
+    //   if (!res) {
+    //     console.error(
+    //       "MANUAL ERROR LOG: TRACK BUFFER NOT LOADED FOR",
+    //       relativePath,
+    //     );
+    //     return;
+    //   }
 
-      const trackSource = createConstrainedBufferSource(res);
-      console.log("MUSIC PLAYING");
-      trackSource.loop = true;
-      trackSource.start();
-    });
+    //   const trackSource = createConstrainedBufferSource(res);
+    //   console.log("MUSIC PLAYING");
+    //   trackSource.loop = true;
+    //   trackSource.start();
+    // });
   };
 
   const playSpeech = (speechName: WimflameSpeechT) => {
@@ -290,18 +291,17 @@ export const useAudio = () => {
     console.log("INITIATING AUDIO CONTEXT");
     audioContext.value = new (window.AudioContext ||
       (window as any)?.webkitAudioContext)();
-
     // iOS hack to stop fucking Safari from suspending audio.
     // Fuck you apple
-    // audioContext.value.onstatechange = async () => {
-    //   if (audioContext.value!.state == "suspended") {
-    //     try {
-    //       await audioContext.value!.resume();
-    //     } catch (err) {
-    //       console.warn("Failed to resume context", err);
-    //     }
-    //   }
-    // };
+    audioContext.value.onstatechange = async () => {
+      if (audioContext.value!.state == "suspended") {
+        try {
+          await audioContext.value!.resume();
+        } catch (err) {
+          console.warn("Failed to resume context", err);
+        }
+      }
+    };
 
     // create & adjust gain (volume)
     breathGainNode.value = audioContext.value.createGain();
@@ -309,6 +309,7 @@ export const useAudio = () => {
 
     inhaleBuffer.value = await loadAudioBuffer("/audio/sounds/inhale.mp3");
     exhaleBuffer.value = await loadAudioBuffer("/audio/sounds/exhale.mp3");
+    return audioContext;
   };
 
   // update breathing volume when settings chage
@@ -371,7 +372,6 @@ export const useAudio = () => {
   };
 
   const playBreathingLoop = async () => {
-    // audioContext.value?.suspend();
     if (!audioContext.value || !inhaleBuffer.value || !exhaleBuffer.value)
       return;
 
@@ -380,8 +380,6 @@ export const useAudio = () => {
       stopAndClearAllActiveAudioBuffers();
       return;
     }
-
-    // audioContext.value.resume();
 
     const inhaleSource = createConstrainedBufferSource(
       inhaleBuffer.value,
