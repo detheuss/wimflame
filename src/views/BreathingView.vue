@@ -15,12 +15,10 @@ import useBreathingSession from "@/composables/useBreathingSession";
 import PhaseView from "@/views/PhaseView.vue";
 import { onBeforeMount, onBeforeUnmount, onMounted } from "vue";
 
-const { currentRound, settings } = useBreathingSession();
+const { currentRound } = useBreathingSession();
 const {
   clearGuidanceAudioQuery,
-  playTrack,
   stopAndClearAllActiveAudioBuffers,
-  playBreathingLoop,
   isBreathingLoopPlaying,
   clearBreathingAudioQuery,
 } = useAudio();
@@ -28,13 +26,7 @@ const {
 onMounted(async () => {
   currentRound.value++;
 
-  if (settings.audio.preferences.isBreathingPlayed) {
-    await playBreathingLoop();
-  }
-
-  if (settings.audio.preferences.isMusicDuringBreathing) {
-    playTrack(settings.audio.trackId);
-  }
+  // breathing and guidance is in Breather.vue
 });
 
 onBeforeMount(() => {

@@ -23,7 +23,10 @@
 
 <script setup lang="ts">
 import useBreathingSession from "@/composables/useBreathingSession";
-import { useAudio } from "@/composables/useAudio";
+import {
+  stopAllConstrainedSpeechAndSound,
+  useAudio,
+} from "@/composables/useAudio";
 import { computed, defineProps, onBeforeUnmount, onMounted, ref } from "vue";
 
 const { playRandomBreatheInSpeech, playRandomBreatheOutSpeech, playSpeech } =
@@ -57,6 +60,8 @@ const {
   setGuidanceAudioQuery,
   isBreathingLoopPlaying,
   playBreathingLoop,
+  clearBreathingAudioQuery,
+  stopAndClearAllActiveAudioBuffers,
 } = useAudio();
 
 const countBreaths = () => {
@@ -104,18 +109,29 @@ const playBreathingGuidance = () => {
 };
 
 onMounted(() => {
+  console.log("breather mounted");
   if (!props.isPreview) {
     countBreaths();
-    isBreathingLoopPlaying.value = true;
-    playBreathingLoop();
-    playBreathingGuidance();
+    if (settings.audio.preferences.isBreathingPlayed) {
+      console.log("playBreathingLoop");
+      isBreathingLoopPlaying.value = true;
+      playBreathingLoop();
+    }
+
+    if (settings.audio.preferences.isGuidancePlayed) {
+      console.log("playBreathingGuidance");
+
+      playBreathingGuidance();
+    }
   }
 });
 
 onBeforeUnmount(() => {
   isBreathingLoopPlaying.value = false;
   clearGuidanceAudioQuery();
-  // if (loopInterval) clearInterval(loopInterval);
+  clearBreathingAudioQuery();
+  stopAllConstrainedSpeechAndSound();
+  stopAndClearAllActiveAudioBuffers();
 });
 </script>
 

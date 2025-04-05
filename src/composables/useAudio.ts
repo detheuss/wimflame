@@ -273,13 +273,16 @@ export const useAudio = () => {
   };
 
   const initiateAudioContext = async () => {
+    console.log("INITIATING AUDIO CONTEXT");
     audioContext.value = new (window.AudioContext ||
       (window as any)?.webkitAudioContext)();
 
+    // iOS hack to stop fucking Safari from suspending audio.
+    // Fuck you apple
     audioContext.value.onstatechange = async () => {
-      if (audioContext.value?.state === "suspended") {
+      if (audioContext.value!.state === "suspended") {
         try {
-          await audioContext.value.resume();
+          await audioContext.value!.resume();
         } catch (err) {
           console.warn("Failed to resume context", err);
         }
@@ -362,6 +365,8 @@ export const useAudio = () => {
       stopAndClearAllActiveAudioBuffers();
       return;
     }
+
+    audioContext.value.state === "running";
     const inhaleSource = createConstrainedBufferSource(
       inhaleBuffer.value,
       breathGainNode.value,
