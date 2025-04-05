@@ -2,7 +2,7 @@
   <nav class="flex items-center gap-1">
     <img src="/logo/logo.svg" alt="Wimflame Logo" width="48" height="48" />
     <h1 class="font">Wimflame</h1>
-    <span class="font-mono text-sm text-secondary-foreground">beta_0.0.6</span>
+    <span class="font-mono text-sm text-secondary-foreground">beta_0.0.7</span>
     <ThemeSwitcher class="ms-auto" />
   </nav>
 </template>

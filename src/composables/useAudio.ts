@@ -199,13 +199,27 @@ export const useAudio = () => {
     return audio;
   };
 
-  const playTrack = (trackName: WimflameMusicTrackIdT) => {
+  const playTrack = async (trackName: WimflameMusicTrackIdT) => {
     const relativePath = `audio/tracks/${trackName}.mp3`;
-    let volume = settings.audio.volumes.music;
-    const audio = createConstrainedAudio(relativePath, trackName, volume, true);
-    audio.loop = true;
-    audio.play();
-    return audio;
+    // let volume = settings.audio.volumes.music;
+    // const audio = createConstrainedAudio(relativePath, trackName, volume, true);
+    // audio.loop = true;
+    // audio.play();
+    // return audio;
+    await loadAudioBuffer(relativePath).then((res) => {
+      if (!res) {
+        console.error(
+          "MANUAL ERROR LOG: TRACK BUFFER NOT LOADED FOR",
+          relativePath,
+        );
+        return;
+      }
+
+      const trackSource = createConstrainedBufferSource(res);
+      console.log("MUSIC PLAYING");
+      trackSource.loop = true;
+      trackSource.start();
+    });
   };
 
   const playSpeech = (speechName: WimflameSpeechT) => {
@@ -357,7 +371,7 @@ export const useAudio = () => {
   };
 
   const playBreathingLoop = async () => {
-    audioContext.value?.suspend();
+    // audioContext.value?.suspend();
     if (!audioContext.value || !inhaleBuffer.value || !exhaleBuffer.value)
       return;
 
@@ -367,8 +381,8 @@ export const useAudio = () => {
       return;
     }
 
-    audioContext.value.resume();
-    
+    // audioContext.value.resume();
+
     const inhaleSource = createConstrainedBufferSource(
       inhaleBuffer.value,
       breathGainNode.value,

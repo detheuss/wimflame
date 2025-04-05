@@ -62,6 +62,7 @@ const {
   playBreathingLoop,
   clearBreathingAudioQuery,
   stopAndClearAllActiveAudioBuffers,
+  playTrack,
 } = useAudio();
 
 const countBreaths = () => {
@@ -111,6 +112,8 @@ const playBreathingGuidance = () => {
 onMounted(() => {
   console.log("breather mounted");
   if (!props.isPreview) {
+    playTrack(settings.audio.trackId);
+
     countBreaths();
     if (settings.audio.preferences.isBreathingPlayed) {
       console.log("playBreathingLoop");
